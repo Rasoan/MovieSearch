@@ -4,7 +4,7 @@ let slider_container = document.querySelector(".container-slider");
 const my_id = "812ef198";
 let current_page = 1; // номер текущей страницы карточек которую обрабатывает слайдер
 let cards_current_page = []; // все карточки текущей страницы
-let my_input_search_value = ''; // текущее значение инпута
+let my_input_search_value = 'troy'; // текущее значение инпута
 let my_input_search_value_translate = ''; // перевод содержимого инпута
 let global_error = true; // тру это значит что всё хорошо и запрос удачен
 let count_pages = 0; // сколько всего страниц по запросу
@@ -19,9 +19,9 @@ let count_pages = 0; // сколько всего страниц по запро
 async function translate() {
 
   try {
-    my_input_search_value = my_input_search.value; // записали оригинал поиска
-
-    if ( !my_input_search_value ) return;
+    my_input_search_value = my_input_search.value ? my_input_search.value : my_input_search_value; // записали оригинал поиска
+    console.log(my_input_search_value);
+    if (!my_input_search_value) return;
     let response = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20200502T072125Z.5214d89f357d1ea0.9c96b2eed2559991b3730c16497d84b60b215622&text=${my_input_search_value}&lang=ru-en`);
     response = await response.json(); // запрос на перевод текста
 
@@ -86,7 +86,7 @@ async function get(number_page = '1') {
 
 
 
-  let time_array = fetchAsyncTodos(number_page); //  содержимое инпута, номер страницы
+  let time_array = fetchAsyncTodos(number_page); //   номер страницы
 
 
   let global_error = await time_array; // работа с индикатором ошибки
@@ -128,8 +128,9 @@ async function get(number_page = '1') {
     cards_current_page[i].year = more_info_cards[i].Year;
     cards_current_page[i].genre = more_info_cards[i].Genre;
     cards_current_page[i].plot = more_info_cards[i].Plot;
+    cards_current_page[i].img = cards_current_page[i].img == "N/A" ? "images/notimage.jpg": cards_current_page[i].img;  
   }
-
+  console.log( cards_current_page );
 }
 
 // просто индикатор
@@ -144,9 +145,54 @@ async function work() {
 
 
 
+let swiper;
+async function init_swip() {
+
+  swiper = new Swiper('.swiper-container', {
+    slidesPerView: 3,
+    centeredSlides: true,
+    spaceBetween: 30,
+    pagination: {
+      el: '.swiper-pagination',
+      type: 'fraction',
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    virtual: {
+      slides: (function () {
+        let slides = [];
+        for (let i = 0; i < 10; i += 1) {
+          slides.push(` 
+          <div class="swiper-contant-container">
+             <a class="swiper-tittle" src="${cards_current_page[i].link}">${cards_current_page[i].title}</a>
+             <p class="swiper-rating">${cards_current_page[i].imdbRating}</p>
+             <img class="swiper-img" src="${cards_current_page[i].img}">
+          </div>
+          `);
+        }
+        return slides;
+      }()),
+    },
+  });
+ 
+
+  //swiper.appendSlide("hello");
+  
+}
 
 
 
+// при загрузке страницы сразу прочитать карточки
+(async function f() {
+  await translate();
+  await get(1);
+  await init_swip();
+
+
+
+})();
 
 
 
@@ -155,62 +201,26 @@ buttonSearch.addEventListener('click', async element => {
 
   await get(1); // номер страницы, по умолчани первая
 
+
 });
 document.addEventListener("submit", element => element.preventDefault());
 
 
 
+/* swiper swiper swiper swiper swiper swiper swiper swiper swiper swiper swiper swiper swiper swiper swiper */
+
+// swiper.slideNext() // перейти к следующему слайду
+// swiper.slidePrev() // перейти к предыдущему слайду
+// swiper.activeIndex // номер активного слайда
+// swiper.update(); // обновить слайдер после манипуляций с его дом
+// swiper.appendSlide ( слайды ); // добавить слайды
+// swiper.removeAllSlides(); // удалить все слайды
 
 
 
 
-
-
-/*.......................................................*/
-var appendNumber = 600;
-var prependNumber = 1;
-var swiper = new Swiper('.swiper-container', {
-  slidesPerView: 3,
-  centeredSlides: true,
-  spaceBetween: 30,
-  pagination: {
-    el: '.swiper-pagination',
-    type: 'fraction',
-  },
-  navigation: {
-    nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev',
-  },
-  virtual: {
-    slides: (function () {
-      var slides = [];
-      for (var i = 0; i < 600; i += 1) {
-        slides.push('Slide ' + (i + 1));
-      }
-      return slides;
-    }()),
-  },
-});
-document.querySelector('.slide-1').addEventListener('click', function (e) {
-  e.preventDefault();
-  swiper.slideTo(0, 0);
-});
-document.querySelector('.slide-250').addEventListener('click', function (e) {
-  e.preventDefault();
-  swiper.slideTo(249, 0);
-});
-document.querySelector('.slide-500').addEventListener('click', function (e) {
-  e.preventDefault();
-  swiper.slideTo(499, 0);
-});
-document.querySelector('.prepend-2-slides').addEventListener('click', function (e) {
-  e.preventDefault();
-  swiper.virtual.prependSlide([
-    'Slide ' + (--prependNumber),
-    'Slide ' + (--prependNumber)
-  ]);
-});
-document.querySelector('.append-slide').addEventListener('click', function (e) {
-  e.preventDefault();
-  swiper.virtual.appendSlide('Slide ' + (++appendNumber));
+let but = document.querySelector(".button-add");
+but.addEventListener("click", element => {
+   swiper.appendSlide(`<div class="swiper-slide">Slide 10"</div>`);
+   swiper.update();
 });
