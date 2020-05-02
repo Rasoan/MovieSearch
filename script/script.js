@@ -22,7 +22,7 @@ async function translate() {
     my_input_search_value = my_input_search.value ? my_input_search.value : my_input_search_value; // записали оригинал поиска
     console.log(my_input_search_value);
     if (!my_input_search_value) return;
-    let response = await fetch(`http://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20200502T072125Z.5214d89f357d1ea0.9c96b2eed2559991b3730c16497d84b60b215622&text=${my_input_search_value}&lang=ru-en`);
+    let response = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20200502T072125Z.5214d89f357d1ea0.9c96b2eed2559991b3730c16497d84b60b215622&text=${my_input_search_value}&lang=ru-en`);
     response = await response.json(); // запрос на перевод текста
 
     response = response.text[0]; // получили текст
@@ -46,7 +46,7 @@ async function fetchAsyncTodos(number_page) {
 
   try {
 
-    let response = await fetch(`http://www.omdbapi.com/?s=${my_input_search_value_translate}&page=${number_page}&apikey=${my_id}&s`);
+    let response = await fetch(`https://www.omdbapi.com/?s=${my_input_search_value_translate}&page=${number_page}&apikey=${my_id}&s`);
     response = await response.json();
 
     return response; // возвращаем объект который содержит текущую страницу результат запроса в промисе
@@ -61,7 +61,7 @@ async function fetchAsyncTodos(number_page) {
 async function fetch_current_kino(kino_id) {
 
   try {
-    const response = await fetch(`http://www.omdbapi.com/?i=${kino_id}&apikey=${my_id}`)
+    const response = await fetch(`https://www.omdbapi.com/?i=${kino_id}&apikey=${my_id}`)
     const data = await response.json(); // распарсить строку в джсон объект
     let k = await data;
     return k;
@@ -108,7 +108,7 @@ async function get(number_page = '1') {
     array_id.push(element.imdbID); // положили айдишник в отдельный массив айдишников
     cards_current_page.push( // положили объект отдельного фильма в массив фильмов (основной массив глобальный)
       {
-        link: `http://www.imdb.com/title/${element.imdbID}`, // ссылка на фильм
+        link: `https://www.imdb.com/title/${element.imdbID}`, // ссылка на фильм
         img: element.Poster // картинка фильма
       }
     )
