@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="style/style.css">
+  <link rel="stylesheet" href="../package/css/swiper.min.css">
   <title>Document</title>
 </head>
-
 <body>
   <div class="header-container">
     <h1 class="header-name">MovieSearch</h1>
@@ -20,14 +19,33 @@
       <span data-name="search-keyboard" class="search-tia tooltip"></span>
     </form>
     <div class="container-slider">
-      карточки
+      <div class="swiper-container">
+        <div class="swiper-wrapper"></div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Add Arrows -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </div>
+      <p class="append-buttons">
+        <a href="#" class="prepend-2-slides">Prepend 2 Slides</a>
+        <a href="#" class="slide-1">Slide 1</a>
+        <a href="#" class="slide-250">Slide 250</a>
+        <a href="#" class="slide-500">Slide 500</a>
+        <a href="#" class="append-slide">Append Slide</a>
+      </p>
     </div>
   </main>
   <footer class="footer-container">
-
     футер
   </footer>
   <script src="script/script.js"></script>
+  <script src="../package/js/swiper.min.js"></script>
 </body>
 
 </html>
+
+
+
+
+  
