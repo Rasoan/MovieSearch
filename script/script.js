@@ -12,6 +12,7 @@ let swiper; // объект слайдер
 let next_movie = 0; // номер следующего фильма который загрузим в слайдер их всего 9 штук
 let count_fetch = 1; // количество запрошенных и добавленных в слайдер страниц по данному запросу инпута
 let indicate_fetch = true; // индикатор фетчей, можно ли сделать следующий фетч? есть ли ещё страницы по данному запросу?
+let test_array = [];
 
 
 
@@ -48,9 +49,11 @@ async function translate() {
 async function fetchAsyncTodos(number_page) {
 
   try {
-
+    console.log("sart fetch");
     let response = await fetch(`https://www.omdbapi.com/?s=${my_input_search_value_translate}&page=${number_page}&apikey=${my_id}&s`);
-    response = await response.json();
+    console.log("end fetch");
+    response = response.json();
+    //console.log("response =", response );
 
     return response; // возвращаем объект который содержит текущую страницу результат запроса в промисе
   } catch (error) {
@@ -86,17 +89,21 @@ async function get(number_page = '1') {
   console.log("Массив из которого буду брать слайды сейчас пустой!")
   console.log("Началась загрузка данных с помощью fetch, пока не разрешу загружать данные не должно быть console.log(), иначе произошла ошибка!!!!!");
   cards_current_page.length = 0; // удаляем все карточки которые там есть в основном объекте их всего 10
+  
+  
+  
 
 
 
   let array_id = []; // массив айдишников фильмов текущей страницы по запросу
 
 
+ 
+  const data = await fetchAsyncTodos(number_page);    // промис в котором вся инфа
+  
 
-  let time_array = fetchAsyncTodos(number_page); //   номер страницы
 
-
-  let global_error = await time_array; // работа с индикатором ошибки
+  let global_error = data; // работа с индикатором ошибки
   global_error = global_error.Response.toLowerCase() == "true" ? true : false; // присвоить этому индикатору значение
 
 
@@ -106,7 +113,7 @@ async function get(number_page = '1') {
   }
 
 
-  const data = await time_array; // промис в котором вся инфа
+  
   count_pages = Math.ceil( data.totalResults / 10 ); // всего количество страниц, делим на 10 и округляем вверх
 
 
@@ -125,7 +132,7 @@ async function get(number_page = '1') {
   array_id.forEach(element => { // по массиву айдишников выцепили дополнительные данные и положили их в массив
     more_info_cards.push(fetch_current_kino(element))
   });
-
+  
   more_info_cards = await Promise.all(more_info_cards); // массив промисов стал массивом объектов
 
   for (let i = 0; i < more_info_cards.length; i++) { // в этом цикле мы добавляем основному объекту все нужную инфу по фильмам
@@ -193,16 +200,12 @@ async function init_swip() {
 /*--------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------------слушатель слайдера начало кода-----------------------------*/
-  swiper.on("slideChange", element => { // добавить слушателя слайдеру
-    
-    
+  swiper.on("slideChange",async element => { // добавить слушателя слайдеру
     
     if ( !indicate_fetch ) { // заткнуть слушателя события перелистывания слайда если все страницы за-fetch-ены
       console.log("Все, больше нет чего запрашивать, фильмов нет, обработчик событий завершён");
       return; 
     }
-    
-
     
     console.log("Номер активного слайда свайпера =" + swiper.activeIndex);
     console.log("Всего слайдов в слайдере =" + count_slides_in_swiper);
@@ -221,14 +224,18 @@ async function init_swip() {
     
      count_slides_in_swiper++; // количество слайдов в слайдере увеличилось на 1
     }
-
+    
+ 
+    console.log("Количество фетчей которые произошли = " + count_fetch);
+    console.log("Количество страниц в слайдере " + count_pages);
     if ( next_movie == 10 && indicate_fetch) { // если счётчик равен 10 и можно ещё сделать запрос, то сбрасываем счётчик следующего фильма
       next_movie = 0;
       count_fetch++; // увеличиваем счётчик фетчей на один что бы сделать следующий новый запрос
-      get( count_fetch   ); // делаем запрос на новые 10 фильмов
+      await get( count_fetch   ); // делаем запрос на новые 10 фильмов
       console.log("Всего страниц по текущему запросу " + count_pages );
-      if ( count_fetch == count_pages) { 
-        console.log("Количество фетчей которые произошли = " + count_fetch);
+      if ( count_fetch > count_pages) { 
+        
+        
         indicate_fetch = false; // запрещаем новые запросы, потому что нет чего больше запрашивать
         return; 
       } // если количество фетчей по данному запросу равно кол-ву стр, то всё заканчиваем
