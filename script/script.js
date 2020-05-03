@@ -81,27 +81,28 @@ async function fetch_current_kino(kino_id) {
 
 
 
-
+let isFetching = false;
 
 // функция запроса, по умолчанию получает первую страницу
 async function get(number_page = '1') {
+  isFetching = true;
   console.log("Номер страницы по текущему запросу " + number_page);
   console.log("сейчас все карточки удалю что бы вместо них fetch новые, их всего 10!");
   console.log("Массив из которого буду брать слайды сейчас пустой!")
   console.log("Началась загрузка данных с помощью fetch, пока не разрешу загружать данные не должно быть console.log(), иначе произошла ошибка!!!!!");
   cards_current_page.length = 0; // удаляем все карточки которые там есть в основном объекте их всего 10
-  
-  
-  
+
+
+
 
 
 
   let array_id = []; // массив айдишников фильмов текущей страницы по запросу
 
-  
- 
+
+
   let data = await fetchAsyncTodos(number_page);    // промис в котором вся инфа
-  
+
   console.log( data );
 
   let global_error = data; // работа с индикатором ошибки
@@ -114,7 +115,7 @@ async function get(number_page = '1') {
   }
 
 
-  
+
   count_pages = Math.ceil( data.totalResults / 10 ); // всего количество страниц, делим на 10 и округляем вверх
   count_kino = data.totalResults;
 
@@ -133,7 +134,7 @@ async function get(number_page = '1') {
   array_id.forEach(element => { // по массиву айдишников выцепили дополнительные данные и положили их в массив
     more_info_cards.push(fetch_current_kino(element))
   });
-  
+
   more_info_cards = await Promise.all(more_info_cards); // массив промисов стал массивом объектов
 
   for (let i = 0; i < more_info_cards.length; i++) { // в этом цикле мы добавляем основному объекту все нужную инфу по фильмам
@@ -143,12 +144,14 @@ async function get(number_page = '1') {
     cards_current_page[i].year = more_info_cards[i].Year;
     cards_current_page[i].genre = more_info_cards[i].Genre;
     cards_current_page[i].plot = more_info_cards[i].Plot;
-    cards_current_page[i].img = cards_current_page[i].img == "N/A" ? "images/notimage.jpg": cards_current_page[i].img; 
+    cards_current_page[i].img = cards_current_page[i].img == "N/A" ? "images/notimage.jpg": cards_current_page[i].img;
   }
 
   console.log("Загрузка данных завершена массив наполнен, теперь можно добавлять новые слайды в слайдер!!!")
   console.log("Вывожу в консоль фильмы которые загрузятся в слайдер");
   console.log( cards_current_page ); // массив с фильмами
+  isFetching = false;
+  if (number_page !== 1) addNextSlide();
 }
 
 // просто индикатор
@@ -158,6 +161,21 @@ async function work() {
 
 
 
+function addNextSlide() {
+  if( swiper.activeIndex == count_slides_in_swiper - 1 && cards_current_page.length ) { // если мы находимся на предпоследнем слайде
+    swiper.appendSlide(`<div class="swiper-slide">
+   <div class="swiper-contant-container">
+    <a class="swiper-tittle" src="${cards_current_page[next_movie].link}">${cards_current_page[next_movie].title}</a>
+    <p class="swiper-rating">${cards_current_page[next_movie].imdbRating}</p>
+    <img class="swiper-img" src="${cards_current_page[next_movie].img}">
+ </div>
+  </div>`);
+
+  next_movie++; // номер следующего добавленного фильма из массива фильмов +1
+
+  count_slides_in_swiper++; // количество слайдов в слайдере увеличилось на 1
+ }
+}
 
 
 
@@ -190,18 +208,20 @@ async function init_swip() {
                          <img class="swiper-img" src="${cards_current_page[i].img}">
                         </div>
                         </div>`);
-   
+
   }
   count_slides_in_swiper = cards_current_page.length;  // кол-во слайдов в слайдере равно массиву фильмов
   await get( 2  ); // после того как загрузили первые 10 карточек забираем новые 10 фильмов
   count_fetch++; // увеличили счётчик фетчей на один
-  
+
 /*--------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------------слушатель слайдера начало кода-----------------------------*/
   swiper.on("slideChange", async () => { // добавить слушателя слайдеру
+    if (isFetching) return;
+
     console.log("------------------------------------------------------");
 
     console.log("Всего слайдов в слайдере =" + count_slides_in_swiper);
@@ -209,56 +229,44 @@ async function init_swip() {
 
 
     console.log("Номер активного слайда свайпера =" + swiper.activeIndex);
-  
+
     console.log("Всего страниц по текущему запросу " + count_pages );
     console.log("номер  фильма в массиве фильмов который добавили только что = " + next_movie);
 
     if ( !indicate_fetch ) { // заткнуть слушателя события перелистывания слайда если все страницы за-fetch-ены
       console.log("Все, больше нет чего запрашивать, фильмов нет, обработчик событий завершён");
-      return; 
-    }
-
-    
-    
-
-
-    
-
-     if( swiper.activeIndex == count_slides_in_swiper - 1  ) { // если мы находимся на предпоследнем слайде
-       swiper.appendSlide(`<div class="swiper-slide">
-      <div class="swiper-contant-container">
-       <a class="swiper-tittle" src="${cards_current_page[next_movie].link}">${cards_current_page[next_movie].title}</a>
-       <p class="swiper-rating">${cards_current_page[next_movie].imdbRating}</p>
-       <img class="swiper-img" src="${cards_current_page[next_movie].img}">
-    </div>
-     </div>`);
-     
-     next_movie++; // номер следующего добавленного фильма из массива фильмов +1
-    
-     count_slides_in_swiper++; // количество слайдов в слайдере увеличилось на 1
+      return;
     }
 
 
-    if ( count_slides_in_swiper ==  count_kino) { 
+
+
+
+
+
+     await addNextSlide();
+
+
+    if ( count_slides_in_swiper ==  count_kino) {
       indicate_fetch = false; // запрещаем новые запросы, потому что нет чего больше запрашивать
-      return; 
+      return;
     } // если количество страниц в слайдере равно максимуму страниц по запросу то exit
-    
- 
 
-    
+
+
+
     if ( next_movie == 10 ) { // если счётчик равен 10 и можно ещё сделать запрос, то сбрасываем счётчик следующего фильма
       next_movie = 0;
       count_fetch++; // увеличиваем счётчик фетчей на один что бы сделать следующий новый запрос
 
       console.log("get start");
       await get( count_fetch   ); // делаем запрос на новые 10 фильмов
-      console.log("get end");  
+      console.log("get end");
     }
-   
 
 
-    
+
+
     console.log("---------------------------------------");
   });
 /*---------------------------------------------слушатель слайдера конец кода------------------------------*/
@@ -306,7 +314,7 @@ async function init_swip() {
   await translate(); // переводчик слова
   console.log("Старт html страницы, загружаю первые 10 страниц по умолчанию в слайдер.");
   await get(1); // фетч запрос первой страницы
-  await init_swip(); // инициализация свайпера 
+  await init_swip(); // инициализация свайпера
 })();
 
 
