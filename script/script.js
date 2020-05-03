@@ -135,12 +135,10 @@ async function get(number_page = '1') {
     cards_current_page[i].year = more_info_cards[i].Year;
     cards_current_page[i].genre = more_info_cards[i].Genre;
     cards_current_page[i].plot = more_info_cards[i].Plot;
-    cards_current_page[i].img = cards_current_page[i].img == "N/A" ? "images/notimage.jpg": cards_current_page[i].img;
-    console.log( cards_current_page[i].title );  
+    cards_current_page[i].img = cards_current_page[i].img == "N/A" ? "images/notimage.jpg": cards_current_page[i].img; 
   }
 
   console.log("Загрузка данных завершена массив наполнен, теперь можно добавлять новые слайды в слайдер!!!")
-  console.log("Загружены следующие данные для слайдера ");
   console.log("Вывожу в консоль фильмы которые загрузятся в слайдер");
   console.log( cards_current_page ); // массив с фильмами
 }
