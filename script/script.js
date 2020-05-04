@@ -2,18 +2,19 @@ let buttonSearch = document.querySelector(".button-search");
 let my_input_search = document.querySelector(".input-search");
 let slider_container = document.querySelector(".container-slider");
 const my_id = "812ef198";
-let cards_current_page = []; // все карточки текущей страницы
-let my_input_search_value = 'troy'; // текущее значение инпута
-let my_input_search_value_translate = ''; // перевод содержимого инпута
-let global_error = true; // тру это значит что всё хорошо и запрос удачен
-let count_pages = 0; // сколько всего страниц по запросу
-let count_slides_in_swiper = 0; // сколько страниц в слайдере на данный момент
-let swiper; // объект слайдер
-let next_movie = 0; // номер следующего фильма который загрузим в слайдер их всего 9 штук
-let count_fetch = 1; // количество запрошенных и добавленных в слайдер страниц по данному запросу инпута
-let indicate_fetch = true; // индикатор фетчей, можно ли сделать следующий фетч? есть ли ещё страницы по данному запросу?
-let test_array = [];
-let count_kino = 0;
+const my_yandex_translate_id = "trnsl.1.1.20200502T072125Z.5214d89f357d1ea0.9c96b2eed2559991b3730c16497d84b60b215622";
+let cards_current_page = [];              // массив в котором хранится 10 объектов с информацией по фильмам
+let my_input_search_value = 'troy';       // текущий текст внутри инпута
+let my_input_search_value_translate = 'troy'; // перевод содержимого инпута
+let global_error = true;                  // индикатор запроса
+let count_kino = 0;                       // сколько всего фильмов по запросу
+let count_pages = 0;                      // сколько всего страниц по запросу
+let count_slides_in_swiper = 0;           // сколько страниц в слайдере на данный момент
+let swiper;                               // объект слайдер
+let next_movie = 0;                       // номер следующего фильма который загрузим в слайдер их всего 9 штук
+let count_fetch = 1;                      // количество запрошенных и добавленных в слайдер страниц по данному запросу инпута
+let indicate_fetch = true;                // индикатор фетчей, можно ли сделать следующий фетч? есть ли ещё страницы по данному запросу?
+
 
 
 
@@ -22,22 +23,23 @@ let count_kino = 0;
 
 // функция которая возьмёт из инпута текст и переведёт его, запишет перевод текста и оригинал в глобальные переменные
 async function translate() {
-
   try {
-    my_input_search_value = my_input_search.value ? my_input_search.value : my_input_search_value; // записали оригинал поиска
-    console.log(my_input_search_value);
-    if (!my_input_search_value) return;
-    let response = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20200502T072125Z.5214d89f357d1ea0.9c96b2eed2559991b3730c16497d84b60b215622&text=${my_input_search_value}&lang=ru-en`);
-    response = await response.json(); // запрос на перевод текста
+    my_input_search_value = my_input_search.value;   // записали оригинал поиска !!!тут подумай ещё!!!
+    console.log("Слайдер обрабатывает вот это слово ", my_input_search_value);
 
-    response = response.text[0]; // получили текст
-    my_input_search_value_translate = response; // записали значение в глобальную переменную
+    if (!my_input_search_value) return;                                       //  тут ещё тоже надо подумать !!!!!!!!!!!!!!!!
+    
+    let response = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${my_yandex_translate_id}&text=${my_input_search_value}&lang=ru-en`);                                    // фетчим перевод слова которое в инпуте
+    response = await response.json();                                        // получили объект из промиса
 
-    return response; // вернули промис в котором перевод слова
+    response = response.text[0];                                             // получили перевод текста на английский
+    my_input_search_value_translate = response;                              // записали перевод текста в глобальную переменную
+    console.log("!!!!!!!!!!!!", response );
+    return response;                                                         // вернули промис в котором перевод слова
   } catch (error) {
-    console.log(error);
+    global_error = true; // инпут пустой
+    console.log("Инпут пустой, алё!");
   }
-
 }
 
 
@@ -46,66 +48,46 @@ async function translate() {
 
 
 
-// запрос на фильмы, первый аргумент это текст запроса, второй аргумент это страница запроса
-async function fetchAsyncTodos(number_page) {
-
-  try {
-    console.log("start fetch");
-    let response = await fetch(`https://www.omdbapi.com/?s=${my_input_search_value_translate}&page=${number_page}&apikey=${my_id}&s`);
-    console.log("end fetch");
-    const data = await response.json();
-    //console.log("response =", response );
-
-    return data; // возвращаем объект который содержит текущую страницу результат запроса в промисе
-  } catch (error) {
-    console.log(error);
-  }
-
+// запрос на фильмы, аргумент это номер запрашиваемой страницы
+async function fetchAsyncTodos( number_page ) {
+ try {
+      let response = await fetch(`https://www.omdbapi.com/?s=${my_input_search_value_translate}&page=${number_page}&apikey=${my_id}&s`);
+      const data = await response.json();        // распарсили строку в объект
+      return data;                               // возвращаем объект который содержит текущую страницу результат запроса в промисе
+ } catch (error) {
+      console.log(error);
+ }
 }
 
 
-// запрос на подробную информацию конкретного фильма по айдишнику
-async function fetch_current_kino(kino_id) {
-
+// запрос на полную информацию по конкретному фильму, аргумент это айдишник фильма
+async function fetch_current_kino( kino_id ) {
   try {
-    const response = await fetch(`https://www.omdbapi.com/?i=${kino_id}&apikey=${my_id}`)
-    const data = await response.json(); // распарсить строку в джсон объект
-    let k = await data;
-    return k;
+       const response = await fetch(`https://www.omdbapi.com/?i=${kino_id}&apikey=${my_id}`);  // фетч
+       const data = await response.json();                      // распарсить строку в джсон объект
+       return data;                                             // вернуть промис в котором объект с основной инфой по фильму
   } catch (error) {
     console.log(error);
   }
-
 }
 
 
 
 
-let isFetching = false;
-
-// функция запроса, по умолчанию получает первую страницу
-async function get(number_page = '1') {
-  isFetching = true;
+let isFetching = false;   // это флаг, пока он true загружаем страницу и не позволяем ложить undefine в слайдер
+// функция запроса, аргумент это номер страницы, которую будем фетчить
+async function get( number_page ) {
+  isFetching = true;             // пока он true, слайды в слайдер ложиться не будут
   console.log("Номер страницы по текущему запросу " + number_page);
   console.log("сейчас все карточки удалю что бы вместо них fetch новые, их всего 10!");
   console.log("Массив из которого буду брать слайды сейчас пустой!")
-  console.log("Началась загрузка данных с помощью fetch, пока не разрешу загружать данные не должно быть console.log(), иначе произошла ошибка!!!!!");
-  cards_current_page.length = 0; // удаляем все карточки которые там есть в основном объекте их всего 10
+  console.log("Началась загрузка данных с помощью fetch!!!!!");
+  cards_current_page.length = 0;                  // удаляем все 10 карточек из массива объекстов-фильмов
 
-
-
-
-
-
-  let array_id = []; // массив айдишников фильмов текущей страницы по запросу
-
-
-
-  let data = await fetchAsyncTodos(number_page);    // промис в котором вся инфа
-
-  console.log( data );
-
-  let global_error = data; // работа с индикатором ошибки
+  let array_id = [];                              // массив айдишников фильмов текущей страницы по запросу
+  let data = await fetchAsyncTodos(number_page);  // промис в котором вся инфа
+  let global_error = data;                        // работа с индикатором ошибки
+ 
   global_error = global_error.Response.toLowerCase() == "true" ? true : false; // присвоить этому индикатору значение
 
 
@@ -117,7 +99,7 @@ async function get(number_page = '1') {
 
 
   count_pages = Math.ceil( data.totalResults / 10 ); // всего количество страниц, делим на 10 и округляем вверх
-  count_kino = data.totalResults;
+  count_kino = data.totalResults;  // количество фильмов по текущему запросу всего
 
 
   data.Search.forEach(element => { // цикл по основной инфе страниц
@@ -151,7 +133,7 @@ async function get(number_page = '1') {
   console.log("Вывожу в консоль фильмы которые загрузятся в слайдер");
   console.log( cards_current_page ); // массив с фильмами
   isFetching = false;
-  if (number_page !== 1) addNextSlide();
+  if (number_page !== 1) addNextSlide(); // вот тут очень интересно
 }
 
 // просто индикатор
@@ -160,20 +142,19 @@ async function work() {
 }
 
 
-
+// функция которая добавит слайд
 function addNextSlide() {
   if( swiper.activeIndex == count_slides_in_swiper - 1 && cards_current_page.length ) { // если мы находимся на предпоследнем слайде
     swiper.appendSlide(`<div class="swiper-slide">
    <div class="swiper-contant-container">
-    <a class="swiper-tittle" src="${cards_current_page[next_movie].link}">${cards_current_page[next_movie].title}</a>
+    <a class="swiper-tittle" href="${cards_current_page[next_movie].link}">${cards_current_page[next_movie].title}</a>
     <p class="swiper-rating">${cards_current_page[next_movie].imdbRating}</p>
     <img class="swiper-img" src="${cards_current_page[next_movie].img}">
  </div>
   </div>`);
 
-  next_movie++; // номер следующего добавленного фильма из массива фильмов +1
-
-  count_slides_in_swiper++; // количество слайдов в слайдере увеличилось на 1
+  next_movie++;              // номер следующего добавленного фильма из массива фильмов +1
+  count_slides_in_swiper++;  // количество слайдов в слайдере +1
  }
 }
 
@@ -203,7 +184,7 @@ async function init_swip() {
   for(let i = 0; i < cards_current_page.length; i++) { // добавить карточки в свайпер при загрузке страницы сразу
     swiper.appendSlide(`<div class="swiper-slide">
                          <div class="swiper-contant-container">
-                         <a class="swiper-tittle" src="${cards_current_page[i].link}">${cards_current_page[i].title}</a>
+                         <a class="swiper-tittle" href="${cards_current_page[i].link}">${cards_current_page[i].title}</a>
                          <p class="swiper-rating">${cards_current_page[i].imdbRating}</p>
                          <img class="swiper-img" src="${cards_current_page[i].img}">
                         </div>
@@ -220,9 +201,13 @@ async function init_swip() {
 /*--------------------------------------------------------------------------------------------------------*/
 /*---------------------------------------------слушатель слайдера начало кода-----------------------------*/
   swiper.on("slideChange", async () => { // добавить слушателя слайдеру
-    if (isFetching) return;
+    console.log("---------слушатель начал работу---------");
+    if (isFetching) { 
+      console.log("Флаг true, обработчик свайпа слайдера резко завершён!");
+      return; 
+    }
 
-    console.log("------------------------------------------------------");
+    
 
     console.log("Всего слайдов в слайдере =" + count_slides_in_swiper);
     console.log("Всего фильмов по запросу =" + count_kino);
@@ -231,11 +216,11 @@ async function init_swip() {
     console.log("Номер активного слайда свайпера =" + swiper.activeIndex);
 
     console.log("Всего страниц по текущему запросу " + count_pages );
-    console.log("номер  фильма в массиве фильмов который добавили только что = " + next_movie);
+    console.log("номер  фильма в массиве фильмов который будем добавлять = " + next_movie);
 
     if ( !indicate_fetch ) { // заткнуть слушателя события перелистывания слайда если все страницы за-fetch-ены
       console.log("Все, больше нет чего запрашивать, фильмов нет, обработчик событий завершён");
-      return;
+      return; // закончили работу слушателя
     }
 
 
@@ -244,7 +229,7 @@ async function init_swip() {
 
 
 
-     await addNextSlide();
+    await addNextSlide(); // вызвали асинхронно функцию которая добавит слайд
 
 
     if ( count_slides_in_swiper ==  count_kino) {
@@ -259,15 +244,15 @@ async function init_swip() {
       next_movie = 0;
       count_fetch++; // увеличиваем счётчик фетчей на один что бы сделать следующий новый запрос
 
-      console.log("get start");
+      
       await get( count_fetch   ); // делаем запрос на новые 10 фильмов
-      console.log("get end");
+      
     }
 
 
 
 
-    console.log("---------------------------------------");
+    console.log("---------слушатель закончил работу---------");
   });
 /*---------------------------------------------слушатель слайдера конец кода------------------------------*/
 /*--------------------------------------------------------------------------------------------------------*/
@@ -281,16 +266,40 @@ async function init_swip() {
 
 
 
+// при загрузке страницы сразу прочитать карточки
+async function initialize_swider() {
+  console.log("Старт html страницы, загружаю первые 10 страниц по умолчанию в слайдер.");
+  translate();
+  await get(1); // фетч запрос первой страницы
+  await init_swip(); // инициализация свайпера
+}
+initialize_swider(); // и вызвать сразу эту функцию
 
 
+
+
+
+// // слушатель события - стукнули по кнопке поисковика
 // buttonSearch.addEventListener('click', async element => {
-//   await translate();
+//   cards_current_page = [];              // массив в котором хранится 10 объектов с информацией по фильмам
+//   global_error = true;                  // индикатор запроса
+//   count_kino = 0;                       // сколько всего фильмов по запросу
+//   count_pages = 0;                      // сколько всего страниц по запросу
+//   count_slides_in_swiper = 0;           // сколько страниц в слайдере на данный момент
+//   swiper;                               // объект слайдер
+//   next_movie = 0;                       // номер следующего фильма который загрузим в слайдер их всего 9 штук
+//   count_fetch = 1;                      // количество запрошенных и добавленных в слайдер страниц по данному запросу инпута
+//   indicate_fetch = true;                // индикатор фетчей, можно ли сделать следующий фетч? есть ли ещё страницы по данному запросу?
+//   swiper.removeAllSlides();             // удалить все слайды из слайдера
 
-//   await get(1); // номер страницы, по умолчани первая
+
+ 
+//   await initialize_swider();                  // инициализировать слайдер новыми данными
+
 
 
 // });
-// document.addEventListener("submit", element => element.preventDefault());
+// document.addEventListener("submit", element => element.preventDefault()); // отменить отправку формы
 
 
 
@@ -309,152 +318,9 @@ async function init_swip() {
 
 
 
-// при загрузке страницы сразу прочитать карточки
-(async function f() {
-  await translate(); // переводчик слова
-  console.log("Старт html страницы, загружаю первые 10 страниц по умолчанию в слайдер.");
-  await get(1); // фетч запрос первой страницы
-  await init_swip(); // инициализация свайпера
-})();
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import { inputSpinner, key } from './constants';
-
-// async function getRaiding(prop) {
-//   const { imdbID } = prop;
-//   const url = `https://www.omdbapi.com/?i=${imdbID}&apikey=${key}`;
-//   const res = await fetch(url);
-//   const data = await res.json();
-//   Object.assign(prop, data);
-//   return data;
-// }
-
-// function spinnerVisionToggler() {
-//   inputSpinner.classList.toggle('d-none');
-// }
-
-// async function getMoviesPageData(name, pageNumber = 1) {
-//   spinnerVisionToggler();
-//   const url = `https://www.omdbapi.com/?s=${name}&apikey=${key}&page=${pageNumber}`;
-//   const res = await fetch(url);
-//   const data = await res.json();
-//   if (data.Response === 'True') {
-//     const promises = data.Search.map(getRaiding);
-//     await Promise.all(promises);
-//   } else {
-//     spinnerVisionToggler();
-//     if (pageNumber > 1) {
-//       return 'no more results';
-//     }
-//     console.log(`Ошибка  ${data.Error}`);
-//     return data.Error.toLowerCase();
-//   }
-//   spinnerVisionToggler();
-//   return data;
-// }
-
-// export default async function createData(state) {
-//   const { searchWord, page, setLastPage } = state;
-//   const firstPageData = await getMoviesPageData(searchWord, page).catch(alert);
-//   if (typeof firstPageData !== 'string') {
-//     setLastPage.call(state, Math.ceil(firstPageData.totalResults / 10));
-//     if (page === 1 && Math.ceil(firstPageData.totalResults / 10) > 1) {
-//       const SECONDPAGE = 2;
-//       state.page = SECONDPAGE;
-//       const secondPageData = await getMoviesPageData(searchWord, SECONDPAGE).catch(alert);
-//       firstPageData.Search.push(...secondPageData.Search);
-//     }
-//     return firstPageData.Search;
-//   }
-//   return firstPageData;
-// }
