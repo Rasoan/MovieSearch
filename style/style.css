@@ -91,8 +91,24 @@
   z-index: 100;
 }
 
+.message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  background-color: white;
+}
 
-
+.message-text {
+  display: block;
+  min-width: 1000px;
+  text-align: center;
+  border: 1px solid black;
+  color: black;
+  padding: 20px 50px;
+  font-size: 20px;
+  font-weight: bold;
+}
 
 
 
