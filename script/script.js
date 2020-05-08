@@ -43,7 +43,19 @@ let movie_search_fetch_error = false;
 
 
 function messageToUser(message_text) {
-  message_block.innerHTML = "Всего фильмов по запросу " + message_text + " " + count_kino;
+  if ( message_text == '' ) {
+    message_block.innerHTML = "Для того что бы найти фильм, надо ввести в поле поиска его название.";
+    return;
+  }
+
+
+
+  if ( count_kino == 0 ) {
+    message_block.innerHTML = "По данному запросу [ " + message_text + " ] ничего не найдено!";
+    return;
+  }
+
+  message_block.innerHTML = "Всего " + count_kino + " фильма по запросу [ " + message_text + " ]";
 }
 
 
@@ -112,7 +124,6 @@ async function fetch_current_kino(kino_id) {
 
   try {
     const response = await fetch(`https://www.omdbapi.com/?i=${kino_id}&apikey=${my_id}`); // фетч
-    console.log( response );
     const data = await response.json(); // распарсить строку в джсон объект
 
     
