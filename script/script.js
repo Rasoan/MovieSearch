@@ -44,22 +44,14 @@ let movie_search_fetch_error = false;
 
 
 function messageToUser(message_text) {
-<<<<<<< HEAD
   if (message_text == '') {
-=======
-  if ( message_text == '' ) {
->>>>>>> 9a0e8d6ca7afb0d62a4c341a6cf2100e1d516262
     message_block.innerHTML = "Для того что бы найти фильм, надо ввести в поле поиска его название.";
     return;
   }
 
 
 
-<<<<<<< HEAD
   if (count_kino == 0) {
-=======
-  if ( count_kino == 0 ) {
->>>>>>> 9a0e8d6ca7afb0d62a4c341a6cf2100e1d516262
     message_block.innerHTML = "По данному запросу [ " + message_text + " ] ничего не найдено!";
     return;
   }
