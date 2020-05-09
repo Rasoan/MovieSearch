@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="style/style.css">
   <link rel="stylesheet" href="style/swiper.min.css">
-  <title>Document</title>
+  <title>MovieSearch</title>
 </head>
 <body>
   <div class="header-container">
@@ -31,18 +31,15 @@
         <div class="swiper-button-next"></div>
         <div class="swiper-button-prev"></div>
       </div>
-      <p class="append-buttons">
-        <a href="#" class="prepend-2-slides">Prepend 2 Slides</a>
-        <a href="#" class="slide-1">Slide 1</a>
-        <a href="#" class="slide-250">Slide 250</a>
-        <a href="#" class="slide-500">Slide 500</a>
-        <a href="#" class="append-slide">Append Slide</a>
-      </p>
+      <div class="swiper-buttons">
+        <p class="back-top">Start</p>
+        <p class="go-end">End</p>
+      </div>
     </div>
   </main>
-  <footer class="footer-container">
+  <!-- <footer class="footer-container">
    
-  </footer>
+  </footer> -->
   <script src="script/swiper.min.js"></script>
   <script src="script/script.js"></script>
 </body>
@@ -50,23 +47,17 @@
 </html>
 
 <style>
-  body {
-    background: #eee;
-    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    color:#000;
-    margin: 0;
-    padding: 0;
-  }
+
   .swiper-container {
     width: 100%;
-    height: 400px;
+    height: 600px;
     margin: 20px auto;
   }
   .swiper-slide {
     text-align: center;
     font-size: 18px;
     background: #fff;
+    border: 2px solid black;
 
     /* Center slide text vertically */
     display: -webkit-box;
@@ -100,13 +91,6 @@
 <script>
 var appendNumber = 600;
 var prependNumber = 1;
-
-
-
-
-/*.......................................................*/
-
-
   document.querySelector('.slide-1').addEventListener('click', function (e) {
     e.preventDefault();
     swiper.slideTo(0, 0);

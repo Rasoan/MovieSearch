@@ -8,6 +8,8 @@ let buttonSearch = document.querySelector(".button-search");
 let my_input_search = document.querySelector(".input-search");
 let slider_container = document.querySelector(".container-slider");
 let message_block = document.querySelector(".message-text");
+const button_top = document.querySelector(".back-top");
+const button_end = document.querySelector(".go-end");
 
 // const my_id = "812ef198"; // rasoian
 const my_id = "88afb97a"; // ipk
@@ -15,17 +17,18 @@ const my_yandex_translate_id = "trnsl.1.1.20200502T072125Z.5214d89f357d1ea0.9c96
 let cards_current_page = []; // массив в котором хранится 10 объектов с информацией по фильмам
 let my_input_search_value = 'troy'; // текущий текст внутри инпута
 let my_input_search_value_translate = 'troy'; // перевод содержимого инпута
-
 let count_kino = 0; // сколько всего фильмов по запросу
 let count_pages = 0; // сколько всего страниц по запросу
 let count_slides_in_swiper = 0; // сколько страниц в слайдере на данный момент
-let next_movie = 0; // номер следующего фильма который загрузим в слайдер их всего 9 штук
 let count_fetch = 1; // количество запрошенных и добавленных в слайдер страниц по данному запросу инпута
 let indicate_fetch = true; // индикатор фетчей, можно ли сделать следующий фетч? есть ли ещё страницы по данному запросу?
 let stop_slide_changed_listener = 0; // для слушателя события перелистывания слайдера
-let movie_request_limit = false;
+let movie_request_limit = false; // когда закончится возможно скачивать фильмы это станет тру
+let translate_error = false; // ошибка в translate()
+let movie_search_fetch_error = false;  // ошибка в поисковике фильмов
+let start_page = false; // если страница только загрузилась заткнуть обработчика события slidechange
 
-let start_page = false;
+
 let swiper = new Swiper('.swiper-container', { // создаём слайдер
   slidesPerView: 4,
   centeredSlides: true,
@@ -40,9 +43,7 @@ let swiper = new Swiper('.swiper-container', { // создаём слайдер
   },
 });
 
-let global_error = true; // индикатор запроса
-let translate_error = false;
-let movie_search_fetch_error = false;
+
 
 
 
@@ -74,6 +75,13 @@ async function translate() {
   if (my_input_search.value == '') {
     messageToUser("Пустой инпут, конец");
     translate_error = true;
+    return;
+  }
+  
+  
+  let check_in_english = my_input_search.value.match(/\w/gi);
+  if ( check_in_english ) {
+    my_input_search_value_translate = my_input_search.value;
     return;
   }
 
@@ -161,6 +169,7 @@ async function get(number_page) {
 
   console.log("Сработала get(), это её начало");
   console.log("Номер страницы которую скачает get() = " + number_page);
+  console.log("Запрос пойдёт по слову ", my_input_search_value_translate);
 
 
 
@@ -176,7 +185,7 @@ async function get(number_page) {
 
   let array_id = []; // массив айдишников фильмов текущей страницы по запросу
   let data = await fetchAsyncTodos(number_page); // промис в котором вся инфа
-  let global_error = data; // работа с индикатором ошибки
+
 
   if (translate_error || movie_search_fetch_error) {
     return;
@@ -205,15 +214,16 @@ async function get(number_page) {
   });
 
   more_info_cards = await Promise.all(more_info_cards); // массив промисов стал массивом объектов
-
+  console.log( more_info_cards );
   for (let i = 0; i < more_info_cards.length; i++) { // в этом цикле мы добавляем основному объекту все нужную инфу по фильмам
-    cards_current_page[i].imdbID = more_info_cards[i].imdbID;
-    cards_current_page[i].title = more_info_cards[i].Title;
-    cards_current_page[i].imdbRating = more_info_cards[i].imdbRating == "N/A" ? "not rating" : more_info_cards[i].imdbRating;
-    cards_current_page[i].year = more_info_cards[i].Year;
-    cards_current_page[i].genre = more_info_cards[i].Genre;
-    cards_current_page[i].plot = more_info_cards[i].Plot;
-    cards_current_page[i].img = cards_current_page[i].img == "N/A" ? "images/notimage.jpg" : cards_current_page[i].img;
+    cards_current_page[i].imdbID = more_info_cards[i].imdbID; // айдишник 
+    cards_current_page[i].title = more_info_cards[i].Title;   // название 
+    cards_current_page[i].imdbRating = more_info_cards[i].imdbRating == "N/A" ? "" : more_info_cards[i].imdbRating; // рейтинг
+    more_info_cards[i].Year = more_info_cards[i].Year.slice(0, 4);
+    cards_current_page[i].year = more_info_cards[i].Year;  // дата выпуска 
+    cards_current_page[i].genre = more_info_cards[i].Genre; // жанр
+    cards_current_page[i].plot = more_info_cards[i].Plot; // описание 
+    cards_current_page[i].img = cards_current_page[i].img == "N/A" ? "images/notimage.jpg" : cards_current_page[i].img; // картинка
   }
 
 
@@ -257,12 +267,17 @@ async function get(number_page) {
     
     for (let i = 0; i < cards_current_page.length; i++) {
       swiper.appendSlide(`<div class="swiper-slide">
-   <div class="swiper-contant-container">
-    <a class="swiper-tittle" href="${cards_current_page[i].link}">${cards_current_page[i].title}</a>
-    <p class="swiper-rating">${cards_current_page[i].imdbRating}</p>
-    <img class="swiper-img" src="${cards_current_page[i].img}">
-     </div>
-     </div>`);
+      <div class="swiper-contant-container">
+       <img class="swiper-img" src="${cards_current_page[i].img}">
+       <a class="swiper-tittle" href="${cards_current_page[i].link}">${cards_current_page[i].title}</a>
+       <p class="swiper-year">${cards_current_page[i].year}</p>
+       <p class="swiper-rating">${cards_current_page[i].imdbRating}</p>
+       <div class="swiper-additional-information">
+         <p class="swiper-genre">${cards_current_page[i].genre}</p>
+         <p class="swiper-plot">${cards_current_page[i].plot}</p>
+       </div>
+        </div>
+        </div>`);
     
 
     
@@ -323,11 +338,9 @@ buttonSearch.addEventListener('click', async element => {
   cards_current_page = []; // массив в котором хранится 10 объектов с информацией по фильмам
   my_input_search_value = 'troy'; // текущий текст внутри инпута
   my_input_search_value_translate = 'troy'; // перевод содержимого инпута
-  global_error = true; // индикатор запроса
   count_kino = 0; // сколько всего фильмов по запросу
   count_pages = 0; // сколько всего страниц по запросу
   count_slides_in_swiper = 0; // сколько страниц в слайдере на данный момент
-  next_movie = 0; // номер следующего фильма который загрузим в слайдер их всего 9 штук
   count_fetch = 1; // количество запрошенных и добавленных в слайдер страниц по данному запросу инпута
   indicate_fetch = true; // индикатор фетчей, можно ли сделать следующий фетч? есть ли ещё страницы по данному запросу?
   start_page = true; // страница только начала загружатся повторно гет не вызывать
@@ -401,3 +414,18 @@ swiper.on("slideChange", async () => { // добавить слушателя с
   
 });
 /*-----------------------------слушатель слайдера конец-----------------------------*/
+
+
+
+
+
+// переход в начало слайдера
+button_top.addEventListener("click", () => {
+  swiper.slideTo( 0  );
+});
+
+// переход в конец слайдера
+button_end.addEventListener("click", () => {
+  swiper.slideTo( count_slides_in_swiper );
+});
+

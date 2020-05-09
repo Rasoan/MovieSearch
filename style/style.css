@@ -1,3 +1,35 @@
+@font-face {
+  font-family: 'Lato-Bold';
+  src: url('fonts/Lato-Bold/Lato-Bold.eot');
+  src: local('☺'), url('fonts/Lato-Bold/Lato-Bold.wof') format('woff'), url('fonts/Lato-Bold/Lato-Bold.ttf') format('truetype'), url('fonts/Lato-Bold/Lato-Bold.svg') format('svg');
+  font-weight: bold;
+  font-style: normal;
+}
+
+
+
+
+
+@font-face {
+  font-family: 'Lato-Light';
+  src: url('fonts/Lato-Light/Lato-Light.eot');
+  src: local('☺'), url('fonts/Lato-Light/Lato-Light.woff') format('woff'), url('fonts/Lato-Light/Lato-Light.ttf') format('truetype'), url('fonts/Lato-Light/Lato-Light.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Lato-Regular';
+  src: url('fonts/Lato-Regular/Lato-Regular.eot');
+  src: local('☺'), url('fonts/Lato-Regular/Lato-Regular.woff') format('woff'), url('fonts/Lato-Regular/Lato-Regular.ttf') format('truetype'), url('fonts/Lato-Regular/Lato-Regular.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+
+
 
 
 .header-container {
@@ -53,6 +85,8 @@
 .container-slider {
   min-height: 300px;
   background-color: rgb(228, 234, 240);
+  margin-bottom: 300px;
+  padding: 20px 0;
 }
 
 .footer-container {
@@ -73,22 +107,72 @@
 
 .swiper-img {
   width: 100%;
-  height: 100%;
+  height: 452px;
   object-fit: cover;
-}
-
-.swiper-rating {
-  position: absolute;
-  bottom: 10px;
-  width: 10px;
-  height: 10px;
-  color: red;
-  left: calc(50% - 10px);
+  margin-bottom: 10px;
 }
 
 .swiper-tittle {
+  font-size: 18px;
+  font-family: 'Lato-Bold';
+  font-weight: bold;
+  font-style: normal;
+  color: black;
+}
+
+.swiper-rating {
+  display: flex;
+  justify-content: center;
+  font-family: 'Lato-Regular';
+  font-weight: normal;
+  font-style: normal;
+}
+
+.swiper-rating:before {
+  content: '';
+  display: block;
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  background: url('../images/star.png');
+  background-size: contain;
+}
+
+
+
+.swiper-year {
   
-  z-index: 100;
+  font-family: 'Lato-Regular';
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+
+
+.swiper-genre {
+  font-family: 'Lato-Regular';
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+.swiper-plot {
+  font-family: 'Lato-Regular';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 15px;
+
+}
+
+.swiper-additional-information {
+  display: none;
+  position: absolute;
+  top: 600px;
+  left: calc(50% - 140px);
+  width: 280px;
+  text-align: justify;
+  border: 1px solid black;
 }
 
 .message-container {
@@ -112,17 +196,59 @@
 
 
 .swiper-pagination {
-    font-size: 50px;
+    font-size: 40px;
+    font-family: 'Lato-Bold';
     font-weight: bold;
-    color: red;
+    font-style: normal;
+    color: black;
+}
+
+
+.swiper-wrapper {
+  overflow: visible !important;
+}
+
+.swiper-contant-container {
+  overflow: visible !important;
+}
+
+.swiper-container {
+  overflow: visible !important;
+  padding-bottom: 90px !important;
 }
 
 
 
+.swiper-buttons {
+ position: relative;
+ font-size: 18px;
+ font-family: 'Lato-Bold';
+ font-weight: bold;
+ font-style: normal;
+ color: black;
+}
 
 
 
+.back-top {
+ position: absolute;
+ left: 500px;
+ bottom: 10px;
+ z-index: 100;
+}
 
+
+.go-end {
+  position: absolute;
+  right: 500px;
+  bottom: 10px;
+  z-index: 100;
+}
+
+.back-top:hover, .go-end:hover {
+  cursor: pointer;
+  color: red;
+}
 
 
 
