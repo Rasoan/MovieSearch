@@ -9,7 +9,8 @@ let my_input_search = document.querySelector(".input-search");
 let slider_container = document.querySelector(".container-slider");
 let message_block = document.querySelector(".message-text");
 
-const my_id = "812ef198";
+// const my_id = "812ef198"; // rasoian
+const my_id = "88afb97a"; // ipk
 const my_yandex_translate_id = "trnsl.1.1.20200502T072125Z.5214d89f357d1ea0.9c96b2eed2559991b3730c16497d84b60b215622";
 let cards_current_page = []; // массив в котором хранится 10 объектов с информацией по фильмам
 let my_input_search_value = 'troy'; // текущий текст внутри инпута
@@ -21,7 +22,9 @@ let count_slides_in_swiper = 0; // сколько страниц в слайде
 let next_movie = 0; // номер следующего фильма который загрузим в слайдер их всего 9 штук
 let count_fetch = 1; // количество запрошенных и добавленных в слайдер страниц по данному запросу инпута
 let indicate_fetch = true; // индикатор фетчей, можно ли сделать следующий фетч? есть ли ещё страницы по данному запросу?
-let stop_slide_changed_listener = 2; // для слушателя события перелистывания слайдера
+let stop_slide_changed_listener = 0; // для слушателя события перелистывания слайдера
+let movie_request_limit = false;
+
 let start_page = false;
 let swiper = new Swiper('.swiper-container', { // создаём слайдер
   slidesPerView: 4,
@@ -48,7 +51,11 @@ function messageToUser(message_text) {
     message_block.innerHTML = "Для того что бы найти фильм, надо ввести в поле поиска его название.";
     return;
   }
-
+  
+  if ( movie_request_limit ) {
+    message_block.innerHTML = "К сожалению лимит запросов на сервер www.omdbapi.com закончен, приходи завтра, найдём кинцо, а на сегодня всё.";
+    return;
+  }
 
 
   if (count_kino == 0) {
@@ -106,6 +113,11 @@ async function fetchAsyncTodos(number_page) {
     const data = await response.json(); // распарсили строку в объект
     
 
+    if (data.Error == "Request limit reached!") {
+      movie_request_limit = true; // если вышел лимит запросов то тру
+      movie_search_fetch_error = true; // ошибка в запросе
+      return;
+    }
 
     if (data.Response == "False") { // если фетч ничего не смог вернуть возбуждаем ошибку
       throw Error();
@@ -115,6 +127,7 @@ async function fetchAsyncTodos(number_page) {
   } catch (error) {
     movie_search_fetch_error = true;
     console.log("ошибка в fetchAsyncTodos() ");
+    
   }
 }
 
@@ -318,6 +331,7 @@ buttonSearch.addEventListener('click', async element => {
   count_fetch = 1; // количество запрошенных и добавленных в слайдер страниц по данному запросу инпута
   indicate_fetch = true; // индикатор фетчей, можно ли сделать следующий фетч? есть ли ещё страницы по данному запросу?
   start_page = true; // страница только начала загружатся повторно гет не вызывать
+  movie_request_limit = false; // станет тру, когда  закончится лимит запрососв на фильмы
 
 
   swiper.removeAllSlides(); // удалить все слайды из слайдера
