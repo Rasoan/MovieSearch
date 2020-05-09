@@ -82,12 +82,7 @@
 
 }
 
-.container-slider {
-  min-height: 300px;
-  background-color: rgb(228, 234, 240);
-  margin-bottom: 300px;
-  padding: 20px 0;
-}
+
 
 .footer-container {
   display: block;
@@ -107,17 +102,20 @@
 
 .swiper-img {
   width: 100%;
-  height: 452px;
+  height: 400px;
   object-fit: cover;
-  margin-bottom: 10px;
 }
 
 .swiper-tittle {
+  display: block;
   font-size: 18px;
   font-family: 'Lato-Bold';
   font-weight: bold;
   font-style: normal;
   color: black;
+  height: 45px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .swiper-rating {
@@ -126,6 +124,7 @@
   font-family: 'Lato-Regular';
   font-weight: normal;
   font-style: normal;
+  margin: 0 0 10px 0;
 }
 
 .swiper-rating:before {
@@ -141,11 +140,10 @@
 
 
 .swiper-year {
-  
   font-family: 'Lato-Regular';
   font-weight: normal;
   font-style: normal;
-
+  margin: 10px 0;
 }
 
 
@@ -250,9 +248,21 @@
   color: red;
 }
 
+.cssload-wrap {
+  position: absolute;
+  bottom: -115px;
+  left: calc( 50% - 70px);
+  z-index: 100;
+}
 
-
-
+.container-slider {
+  position: relative;
+  min-height: 300px;
+  background-color: rgb(228, 234, 240);
+  margin-bottom: 300px;
+  padding: 10px 0 50px;
+  background: inherit;
+}
 
 
 

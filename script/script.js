@@ -11,6 +11,7 @@ let message_block = document.querySelector(".message-text");
 const button_top = document.querySelector(".back-top");
 const button_end = document.querySelector(".go-end");
 const loading = document.getElementById("followingBallsG");
+const indicator_slides = document.getElementById("swiper-pagination-id");
 
 // const my_id = "812ef198"; // rasoian
 const my_id = "88afb97a"; // ipk
@@ -167,6 +168,7 @@ let isFetching = false; // это флаг, пока он true загружае�
 // функция запроса, аргумент это номер страницы, которую будем фетчить
 async function get(number_page) {
   loading.style.visibility = "visible";
+  indicator_slides.style.visibility = "hidden";
  
 
   console.log("Сработала get(), это её начало");
@@ -241,7 +243,7 @@ async function get(number_page) {
 
   console.log("Конец get(), массив фильмов = ", cards_current_page );
   loading.style.visibility = "hidden";
-  //if (number_page !== 1) addNextSlide(); // вот тут очень интересно
+  indicator_slides.style.visibility = "visible";
 }
 
 
