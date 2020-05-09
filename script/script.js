@@ -10,6 +10,7 @@ let slider_container = document.querySelector(".container-slider");
 let message_block = document.querySelector(".message-text");
 const button_top = document.querySelector(".back-top");
 const button_end = document.querySelector(".go-end");
+const loading = document.getElementById("followingBallsG");
 
 // const my_id = "812ef198"; // rasoian
 const my_id = "88afb97a"; // ipk
@@ -165,7 +166,8 @@ async function fetch_current_kino(kino_id) {
 let isFetching = false; // это флаг, пока он true загружаем страницу и не позволяем ложить undefine в слайдер
 // функция запроса, аргумент это номер страницы, которую будем фетчить
 async function get(number_page) {
-
+  loading.style.visibility = "visible";
+ 
 
   console.log("Сработала get(), это её начало");
   console.log("Номер страницы которую скачает get() = " + number_page);
@@ -238,6 +240,7 @@ async function get(number_page) {
   
 
   console.log("Конец get(), массив фильмов = ", cards_current_page );
+  loading.style.visibility = "hidden";
   //if (number_page !== 1) addNextSlide(); // вот тут очень интересно
 }
 
