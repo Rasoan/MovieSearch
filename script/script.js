@@ -417,7 +417,7 @@ document.addEventListener("keydown", async element => {
   start_page = true; // страница только начала загружатся повторно гет не вызывать
   movie_request_limit = false; // станет тру, когда  закончится лимит запрососв на фильмы
 
-  alert( word_query );
+ 
 
   await translate(); // перевести слово
   await get(1); // фетч запрос первой страницы
