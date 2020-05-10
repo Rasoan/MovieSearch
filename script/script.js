@@ -49,7 +49,40 @@ let swiper = new Swiper('.swiper-container', { // создаём слайдер
     nextEl: '.swiper-button-next',
     prevEl: '.swiper-button-prev',
   },
+  breakpoints: {
+    // when window width is >= 320px
+    300: {
+      slidesPerView: 2,
+      spaceBetween: 10
+    },
+    // when window width is >= 480px
+    480: {
+      slidesPerView: 3,
+      spaceBetween: 20
+    },
+    // when window width is >= 640px
+    800: {
+      slidesPerView: 4,
+      spaceBetween: 30
+    }
+  }
+
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -68,11 +101,11 @@ function messageToUser(message_text) {
 
 
   if (count_kino == 0) {
-    message_block.innerHTML = "По данному запросу [ " + message_text + " ] ничего не найдено!";
+    message_block.innerHTML = "No results were found for … ";
     return;
   }
 
-  message_block.innerHTML = "Всего " + count_kino + " фильма по запросу [ " + message_text + " ]";
+  message_block.innerHTML = "Showing results for  [ " + message_text + " ], " + " total " + count_kino + " films.";
 }
 
 
@@ -102,7 +135,7 @@ async function translate() {
     response = response.text[0]; // получили перевод текста на английский
     my_input_search_value_translate = response; // записали перевод текста в глобальную переменную
 
-    console.log("Сработала translate() и вернула " + response);
+   
     return response; // вернули промис в котором перевод слова
   } catch (error) {
     messageToUser("Это блок catch в функции translate, ОШИБКА!");
@@ -142,7 +175,7 @@ async function fetchAsyncTodos(number_page) {
     return data; // возвращаем объект который содержит текущую страницу результат запроса в промисе
   } catch (error) {
     movie_search_fetch_error = true;
-    console.log("ошибка в fetchAsyncTodos() ");
+
     
   }
 }
@@ -163,7 +196,7 @@ async function fetch_current_kino(kino_id) {
   } catch (error) {
 
     movie_search_fetch_error = true;
-    console.log("Ошибка в fetch_current_kino()");
+
   }
 }
 
@@ -177,9 +210,7 @@ async function get(number_page) {
   indicator_slides.style.visibility = "hidden";
  
 
-  console.log("Сработала get(), это её начало");
-  console.log("Номер страницы которую скачает get() = " + number_page);
-  console.log("Запрос пойдёт по слову ", my_input_search_value_translate);
+
 
 
 
@@ -226,7 +257,7 @@ async function get(number_page) {
   });
 
   more_info_cards = await Promise.all(more_info_cards); // массив промисов стал массивом объектов
-  console.log( more_info_cards );
+ 
   for (let i = 0; i < more_info_cards.length; i++) { // в этом цикле мы добавляем основному объекту все нужную инфу по фильмам
     cards_current_page[i].imdbID = more_info_cards[i].imdbID; // айдишник 
     cards_current_page[i].title = more_info_cards[i].Title;   // название 
@@ -244,12 +275,12 @@ async function get(number_page) {
   isFetching = false; // разрешаем ложить карточки в слайдер, гет закончила работу
   
 
-  console.log("count_fetch = " + count_fetch );
+  
   count_fetch++; // увеличиваем счётчик фетчей на один что бы сделать следующий новый запрос
-  console.log("count_fetch = " + count_fetch );
+  
   
 
-  console.log("Конец get(), массив фильмов = ", cards_current_page );
+ 
   loading.style.visibility = "hidden";
   indicator_slides.style.visibility = "visible";
 }
@@ -259,14 +290,14 @@ async function get(number_page) {
 
 // функция которая добавит слайд
  function addNextSlide() {
-   console.log("Начало addNextSlide()");
+
 
 
 
   
 
   if (translate_error || movie_search_fetch_error) {
-    console.log("addNextSlide() досрочно закрыта! ничего не добавлено.");
+ 
     return;
   }
 
@@ -274,7 +305,7 @@ async function get(number_page) {
 
 
 
-    console.log("Пошла загрузка в слайдер карточек");
+ 
     
     
     
@@ -296,7 +327,7 @@ async function get(number_page) {
     
     count_slides_in_swiper++; // количество слайдов в слайдере +1
 
-    console.log("В слайдер загрузилась " + Number(count_fetch - 1) + " страница"); 
+ 
   }
 
   
@@ -306,7 +337,7 @@ async function get(number_page) {
 
 
 
-  console.log("Конец addnextslide().");
+
 }
 
 
@@ -461,23 +492,28 @@ document.addEventListener("keyup", async element => {
 
 /*-----------------------------слушатель слайдера начало-----------------------------*/
 swiper.on("slideChange", async () => { // добавить слушателя слайдеру
-  console.log("------------Событие slideChange сработало-----------");
+ 
 
   // убрать виртуальную клавиатуру если свайпнули слайдер
   if ( !my_keyboard.classList.contains("display-none") ) { 
     my_keyboard.classList.add("display-none");
   }
+
+  if ( movie_request_limit ) {
+    message_block.innerHTML = "К сожалению лимит запросов на сервер www.omdbapi.com закончен, приходи завтра, найдём кинцо, а на сегодня всё.";
+    return;
+  }
   
 
 
   if (translate_error || movie_search_fetch_error || isFetching || !indicate_fetch) {
-    console.log("Событие slideChange exit");
+
     return;
   }
   
 
   if (stop_slide_changed_listener) {
-    console.log("Событие slideChange exit, при клике по инпуту!");
+
     stop_slide_changed_listener--;
     return;
   }
@@ -494,13 +530,10 @@ swiper.on("slideChange", async () => { // добавить слушателя с
 
   
   
-  await ( () => {
-    console.log("В слайдере слайдов = " + count_slides_in_swiper );
-    console.log("Всего фильмов = " + count_kino );
-  })();
+
   
   if (count_slides_in_swiper == count_kino) {
-    console.log("Событие slideChange exit нет чего запрашивать");
+
     indicate_fetch = false; // запрещаем новые запросы, потому что нет чего больше запрашивать
     return;
   } // если количество страниц в слайдере равно максимуму страниц по запросу то exit
@@ -528,6 +561,11 @@ button_top.addEventListener("click", () => {
 button_end.addEventListener("click", () => {
   stop_slide_changed_listener = 0; // для слушателя события перелистывания слайдера
   swiper.slideTo( count_slides_in_swiper );
+
+  if ( movie_request_limit ) {
+    message_block.innerHTML = "К сожалению лимит запросов на сервер www.omdbapi.com закончен, приходи завтра, найдём кинцо, а на сегодня всё.";
+    return;
+  }
 });
 
 let my_keyboard = document.querySelector(".keyboard-container");

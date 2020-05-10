@@ -6,7 +6,7 @@
 
 .keyboard-container {
   position: absolute;
-  top: 400px;
+  top: 430px;
   left: calc( 50% - 500px);
   width: 1000px;
   display: flex;

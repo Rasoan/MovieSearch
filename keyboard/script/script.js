@@ -615,8 +615,8 @@ let object_keys = {
       },
       {
         code: 'MetaLeft',
-        en: '&#65794;&#65794;<br>&#65794;&#65794;',
-        ru: '&#65794;&#65794;<br>&#65794;&#65794;',
+        en: 'Rus',
+        ru: 'En',
         print: false,
         returns(argument) {
           if (argument == "en") return this.en;
@@ -973,6 +973,7 @@ document.addEventListener('mousedown', function (e) {
     if (  !e.target.classList.contains('key-special') && e.target.innerHTML == element.innerHTML  ) {  // если произошло событие клик по кнопке 
                                                                                                        // и это не специальная кнопка ( типа shift..)
        e.target.classList.add('key-active');               // добавили тогда этой клавише класс active
+       if ( e.target.innerText == "En" || e.target.innerText == "Rus" ) return;
        let letter = element.innerText;                     // положили в временную переменную букву из клавиатуры по которой тыркнули мышкой
        let new_array_textarea = [...textarea_inp.value];   // массив в который положили содержимое textarea до события клика по клавише
        new_array_textarea.splice(current_pos,0,letter);    // добавили на позиции курсора букву из прожатой клавиши в временный массив
@@ -1108,7 +1109,7 @@ document.addEventListener('mouseup', function (e) {
         
       });
    if (flag) return;
-   console.log('Клавиша не распознана, проверьте соответствие раскладки на вашей клавиатуре и на виртуальной, они должны совпадать.');
+   
   });
 
 
@@ -1162,3 +1163,6 @@ document.addEventListener("keydown", element => {
   
 });
   
+
+
+
