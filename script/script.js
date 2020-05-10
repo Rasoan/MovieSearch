@@ -12,6 +12,9 @@ const button_top = document.querySelector(".back-top");
 const button_end = document.querySelector(".go-end");
 const loading = document.getElementById("followingBallsG");
 const indicator_slides = document.getElementById("swiper-pagination-id");
+const clear_search = document.getElementById("form-search-clear-id");
+const keyboard_search = document.getElementById("form-search-keyboard-id");
+let key_up_flag = false;
 
 // const my_id = "812ef198"; // rasoian
 const my_id = "88afb97a"; // ipk
@@ -364,18 +367,66 @@ buttonSearch.addEventListener('click', async element => {
   messageToUser(my_input_search.value);
   await addNextSlide(); // инициализировать слайдер новыми карточками
 });
-document.addEventListener("submit", element => element.preventDefault()); // отменить отправку формы
+
+
+
+// то же самое что и клик когда нажимаем на ентер
+document.addEventListener("keydown", async element => {
+  if ( element.code != "Enter" || key_up_flag ) return; // если нажали не по ентеру
+
+  key_up_flag = true; // запрещаем повторное бесконечное нажатие enter
+
+  // закрываем клавиатуру и выполняем запрос
+  if ( !my_keyboard.classList.contains("display-none") ) {
+    my_keyboard.classList.add("display-none");
+  }
+
+
+
+  translate_error = false;
+  movie_search_fetch_error = false;
+  stop_slide_changed_listener = 2; // пока true слушатель слайдера заткнут
+  cards_current_page = []; // массив в котором хранится 10 объектов с информацией по фильмам
+  my_input_search_value = 'troy'; // текущий текст внутри инпута
+  my_input_search_value_translate = 'troy'; // перевод содержимого инпута
+  count_kino = 0; // сколько всего фильмов по запросу
+  count_pages = 0; // сколько всего страниц по запросу
+  count_slides_in_swiper = 0; // сколько страниц в слайдере на данный момент
+  count_fetch = 1; // количество запрошенных и добавленных в слайдер страниц по данному запросу инпута
+  indicate_fetch = true; // индикатор фетчей, можно ли сделать следующий фетч? есть ли ещё страницы по данному запросу?
+  start_page = true; // страница только начала загружатся повторно гет не вызывать
+  movie_request_limit = false; // станет тру, когда  закончится лимит запрососв на фильмы
+
+
+  swiper.removeAllSlides(); // удалить все слайды из слайдера
 
 
 
 
+  await translate(); // перевести слово
+  await get(1); // фетч запрос первой страницы
+  messageToUser(my_input_search.value);
+  await addNextSlide(); // инициализировать слайдер новыми карточками
 
+});
+
+
+// когда отпущу enter флаг возвращаем в фолс
+document.addEventListener("keyup", async element => {
+  key_up_flag = false;
+});
 
 
 
 /*-----------------------------слушатель слайдера начало-----------------------------*/
 swiper.on("slideChange", async () => { // добавить слушателя слайдеру
   console.log("------------Событие slideChange сработало-----------");
+
+  // убрать виртуальную клавиатуру если свайпнули слайдер
+  if ( !my_keyboard.classList.contains("display-none") ) { 
+    my_keyboard.classList.add("display-none");
+  }
+  
 
 
   if (translate_error || movie_search_fetch_error || isFetching || !indicate_fetch) {
@@ -437,4 +488,74 @@ button_end.addEventListener("click", () => {
   stop_slide_changed_listener = 0; // для слушателя события перелистывания слайдера
   swiper.slideTo( count_slides_in_swiper );
 });
+
+let my_keyboard = document.querySelector(".keyboard-container");
+keyboard_search.addEventListener("click", () => {
+  my_keyboard.classList.toggle("display-none");
+});
+
+
+clear_search.addEventListener("click", () => {
+  my_input_search.value = '';
+});
+
+
+
+document.addEventListener('click', element => {
+  if( element.target.closest(".keyboard-container") || element.target.classList.contains("form-search-keyboard") ||element.target.classList.contains("input-search") || element.target.classList.contains("form-search-clear")) 
+  return;
+  
+  if ( !my_keyboard.classList.contains("display-none") ) {
+    my_keyboard.classList.add("display-none");
+  }
+  
+});
+
+document.addEventListener('click', element => {
+  if ( element.target.closest(".keyboard-container") ) {
+    my_input_search.focus();
+  }
+});
+
+
+// когда кликнули по кнопке enter на виртуальной клавиатуре
+document.addEventListener('click', async element => {
+  
+ if( !element.target.classList.contains("key-enter") )  return; // если кликнули мышко не по ентеру то выходим из листенера
+ 
+ // закрываем клавиатуру и выполняем запрос
+ if ( !my_keyboard.classList.contains("display-none") ) {
+  my_keyboard.classList.add("display-none");
+}
+  
+ 
+ translate_error = false;
+  movie_search_fetch_error = false;
+  stop_slide_changed_listener = 2; // пока true слушатель слайдера заткнут
+  cards_current_page = []; // массив в котором хранится 10 объектов с информацией по фильмам
+  my_input_search_value = 'troy'; // текущий текст внутри инпута
+  my_input_search_value_translate = 'troy'; // перевод содержимого инпута
+  count_kino = 0; // сколько всего фильмов по запросу
+  count_pages = 0; // сколько всего страниц по запросу
+  count_slides_in_swiper = 0; // сколько страниц в слайдере на данный момент
+  count_fetch = 1; // количество запрошенных и добавленных в слайдер страниц по данному запросу инпута
+  indicate_fetch = true; // индикатор фетчей, можно ли сделать следующий фетч? есть ли ещё страницы по данному запросу?
+  start_page = true; // страница только начала загружатся повторно гет не вызывать
+  movie_request_limit = false; // станет тру, когда  закончится лимит запрососв на фильмы
+
+
+  swiper.removeAllSlides(); // удалить все слайды из слайдера
+
+
+
+
+  await translate(); // перевести слово
+  await get(1); // фетч запрос первой страницы
+  messageToUser(my_input_search.value);
+  await addNextSlide(); // инициализировать слайдер новыми карточками
+});
+
+
+
+
 

@@ -5,24 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="style/style.css">
   <link rel="stylesheet" href="style/swiper.min.css">
+  <link rel="stylesheet" href="keyboard/style/style.css">
   <link rel="stylesheet" href="style/loading.css">
   <title>MovieSearch</title>
 </head>
 <body>
+  <script src="keyboard/script/script.js"></script>
   <div class="header-container">
     <h1 class="header-name">MovieSearch</h1>
     <p class="header-text">первый поисковик фильмов.</p>
   </div>
 
   <main class="main-container">
-    <form class="form-search">
-      <p class="form-search-clear"></p>
-      <p class="form-search-keyboard"></p>
-      <input class="input-search" type="text" placeholder="Введите название фильма" autofocus="">
+    <div class="form-search">
+      <p id="form-search-clear-id" class="form-search-clear"></p>
+      <p id="form-search-keyboard-id" class="form-search-keyboard"></p>
+      <input class="entry-field input-search" type="text" placeholder="Введите название фильма" autofocus="">
       <button class="button-search" type="submit">Search</button>
       <span data-name="Clear" class="search-clear tooltip"></span>
       <span data-name="search-keyboard" class="search-tia tooltip"></span>
-    </form>
+    </div>
     <div class="message-container">
       <p class="message-text">---------</p>
     </div>
@@ -103,6 +105,8 @@
     font-size: 13px;
   }
 </style>
+
+
 
 
   

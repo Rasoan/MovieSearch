@@ -32,6 +32,7 @@ body {
   font-family: 'Lato-Regular';
   font-weight: normal;
   font-style: normal;
+  overflow-x: hidden;
 }
 
 
@@ -100,7 +101,6 @@ body {
 
 .form-search {
   position: relative;
-  width: 100%;
   margin: 0px auto;
   padding: 30px;
   display: flex;
@@ -116,7 +116,7 @@ body {
   position: absolute;
   margin: 0;
   top: 37px;
-  left: 800px;
+  left: 868px;
   width: 25px;
   height: 25px;
   background: url(../images/clear.png);
@@ -124,14 +124,14 @@ body {
   background-repeat: no-repeat;
   z-index: 1;
 }
-
+    
 
 .form-search-keyboard {
   content: '';
   position: absolute;
   margin: 0;
   top: 36px;
-  left: 740px;
+  left: 810px;
   width: 50px;
   height: 30px;
   background: url(../images/keyboard.png);
@@ -147,13 +147,13 @@ body {
 
 .input-search {
   position: relative;
-  width: 400px;
-  padding: 10px;
+  width: 500px;
+  padding: 10px 100px 10px 10px;
   margin-right: 20px;
   border: 2px solid black;
   outline: none;
 }
-
+  
 
 
 .button-search {
@@ -229,8 +229,13 @@ body {
   font-style: normal;
   color: black;
   height: 45px;
+  text-decoration: none;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.swiper-tittle:hover {
+  text-decoration: underline;
 }
 
 .swiper-rating {
@@ -325,7 +330,8 @@ body {
 
 .swiper-container {
   overflow: visible !important;
-  padding-bottom: 90px !important;
+  margin: 0 !important;
+  padding-bottom: 125px !important;
 }
 
 
@@ -346,7 +352,7 @@ body {
  position: absolute;
  left: 500px;
  bottom: 10px;
- z-index: 100;
+ z-index: 1;
 }
 
 .back-top::before {
@@ -369,7 +375,7 @@ body {
   position: absolute;
   right: 500px;
   bottom: 10px;
-  z-index: 100;
+  z-index: 1;
 }
 
 .go-end::after {
@@ -396,22 +402,19 @@ body {
   position: absolute;
   bottom: -115px;
   left: calc( 50% - 70px);
-  z-index: 100;
+  z-index: 1;
 }
 
 .container-slider {
   position: relative;
   min-height: 300px;
   background-color: rgb(228, 234, 240);
-  margin-bottom: 300px;
-  padding: 10px 0 50px;
+  padding: 0 0 50px;
   background: inherit;
 }
 
 
-
-
-
-
-
+.display-none {
+  display: none !important;
+}
 
