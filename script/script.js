@@ -192,6 +192,8 @@ async function get(number_page) {
 
 
   if (translate_error || movie_search_fetch_error) {
+    loading.style.visibility = "hidden";
+    indicator_slides.style.visibility = "visible";
     return;
   }
 

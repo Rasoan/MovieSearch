@@ -297,10 +297,10 @@ body {
 
 .message-text {
   display: block;
+  padding: 0px 50px 5px;
   text-align: center;
   border-bottom: 5px solid black;
   color: black;
-  padding: 0px 50px;
   font-size: 20px;
   font-weight: bold;
 }
