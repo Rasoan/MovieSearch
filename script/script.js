@@ -14,10 +14,11 @@ const loading = document.getElementById("followingBallsG");
 const indicator_slides = document.getElementById("swiper-pagination-id");
 const clear_search = document.getElementById("form-search-clear-id");
 const keyboard_search = document.getElementById("form-search-keyboard-id");
-let key_up_flag = false;
+
 
 // const my_id = "812ef198"; // rasoian
-const my_id = "88afb97a"; // ipk
+// const my_id = "88afb97a"; // ipk
+const my_id = "6670627"; // ipk2diplom
 const my_yandex_translate_id = "trnsl.1.1.20200502T072125Z.5214d89f357d1ea0.9c96b2eed2559991b3730c16497d84b60b215622";
 let cards_current_page = []; // массив в котором хранится 10 объектов с информацией по фильмам
 let my_input_search_value = 'troy'; // текущий текст внутри инпута
@@ -32,6 +33,8 @@ let movie_request_limit = false; // когда закончится возмож
 let translate_error = false; // ошибка в translate()
 let movie_search_fetch_error = false;  // ошибка в поисковике фильмов
 let start_page = false; // если страница только загрузилась заткнуть обработчика события slidechange
+let key_up_flag = false; // запрещаем повторное нажатие по enter
+let word_query = ''; // последний запрос
 
 
 let swiper = new Swiper('.swiper-container', { // создаём слайдер
@@ -346,8 +349,7 @@ buttonSearch.addEventListener('click', async element => {
   movie_search_fetch_error = false;
   stop_slide_changed_listener = 2; // пока true слушатель слайдера заткнут
   cards_current_page = []; // массив в котором хранится 10 объектов с информацией по фильмам
-  my_input_search_value = 'troy'; // текущий текст внутри инпута
-  my_input_search_value_translate = 'troy'; // перевод содержимого инпута
+  word_query = my_input_search_value_translate; // запоминаем последний запрос
   count_kino = 0; // сколько всего фильмов по запросу
   count_pages = 0; // сколько всего страниц по запросу
   count_slides_in_swiper = 0; // сколько страниц в слайдере на данный момент
@@ -357,7 +359,7 @@ buttonSearch.addEventListener('click', async element => {
   movie_request_limit = false; // станет тру, когда  закончится лимит запрососв на фильмы
 
 
-  swiper.removeAllSlides(); // удалить все слайды из слайдера
+  
 
 
 
@@ -365,7 +367,26 @@ buttonSearch.addEventListener('click', async element => {
   await translate(); // перевести слово
   await get(1); // фетч запрос первой страницы
   messageToUser(my_input_search.value);
-  await addNextSlide(); // инициализировать слайдер новыми карточками
+  
+
+ 
+  if ( count_kino ) {
+    translate_error = false;
+    movie_search_fetch_error = false;
+    swiper.removeAllSlides(); // удалить все слайды из слайдера
+    await addNextSlide(); // инициализировать слайдер новыми карточками
+  }
+  else {
+    translate_error = false;
+    movie_search_fetch_error = false;
+    my_input_search_value = word_query; // текущий текст внутри инпута
+    my_input_search_value_translate = word_query; // перевод содержимого инпута
+    await get(1); // фетч запрос первой страницы
+    swiper.removeAllSlides(); // удалить все слайды из слайдера
+    await addNextSlide(); // инициализировать слайдер новыми карточками
+  }
+
+
 });
 
 
@@ -387,8 +408,7 @@ document.addEventListener("keydown", async element => {
   movie_search_fetch_error = false;
   stop_slide_changed_listener = 2; // пока true слушатель слайдера заткнут
   cards_current_page = []; // массив в котором хранится 10 объектов с информацией по фильмам
-  my_input_search_value = 'troy'; // текущий текст внутри инпута
-  my_input_search_value_translate = 'troy'; // перевод содержимого инпута
+  word_query = my_input_search_value_translate; // запоминаем последний запрос
   count_kino = 0; // сколько всего фильмов по запросу
   count_pages = 0; // сколько всего страниц по запросу
   count_slides_in_swiper = 0; // сколько страниц в слайдере на данный момент
@@ -397,18 +417,39 @@ document.addEventListener("keydown", async element => {
   start_page = true; // страница только начала загружатся повторно гет не вызывать
   movie_request_limit = false; // станет тру, когда  закончится лимит запрососв на фильмы
 
-
-  swiper.removeAllSlides(); // удалить все слайды из слайдера
-
-
-
+  alert( word_query );
 
   await translate(); // перевести слово
   await get(1); // фетч запрос первой страницы
   messageToUser(my_input_search.value);
-  await addNextSlide(); // инициализировать слайдер новыми карточками
+  
+
+
+  if ( count_kino ) {
+    translate_error = false;
+    movie_search_fetch_error = false;
+    swiper.removeAllSlides(); // удалить все слайды из слайдера
+    await addNextSlide(); // инициализировать слайдер новыми карточками
+  }
+  else {
+    translate_error = false;
+    movie_search_fetch_error = false;
+    my_input_search_value = word_query; // текущий текст внутри инпута
+    my_input_search_value_translate = word_query; // перевод содержимого инпута
+    await get(1); // фетч запрос первой страницы
+    swiper.removeAllSlides(); // удалить все слайды из слайдера
+    await addNextSlide(); // инициализировать слайдер новыми карточками
+  }
 
 });
+
+
+
+
+
+
+
+
 
 
 // когда отпущу enter флаг возвращаем в фолс
@@ -518,6 +559,11 @@ document.addEventListener('click', element => {
 });
 
 
+
+
+
+
+
 // когда кликнули по кнопке enter на виртуальной клавиатуре
 document.addEventListener('click', async element => {
   
@@ -533,8 +579,7 @@ document.addEventListener('click', async element => {
   movie_search_fetch_error = false;
   stop_slide_changed_listener = 2; // пока true слушатель слайдера заткнут
   cards_current_page = []; // массив в котором хранится 10 объектов с информацией по фильмам
-  my_input_search_value = 'troy'; // текущий текст внутри инпута
-  my_input_search_value_translate = 'troy'; // перевод содержимого инпута
+  word_query = my_input_search_value_translate; // запоминаем последний запрос
   count_kino = 0; // сколько всего фильмов по запросу
   count_pages = 0; // сколько всего страниц по запросу
   count_slides_in_swiper = 0; // сколько страниц в слайдере на данный момент
@@ -544,7 +589,7 @@ document.addEventListener('click', async element => {
   movie_request_limit = false; // станет тру, когда  закончится лимит запрососв на фильмы
 
 
-  swiper.removeAllSlides(); // удалить все слайды из слайдера
+  
 
 
 
@@ -552,7 +597,24 @@ document.addEventListener('click', async element => {
   await translate(); // перевести слово
   await get(1); // фетч запрос первой страницы
   messageToUser(my_input_search.value);
-  await addNextSlide(); // инициализировать слайдер новыми карточками
+  
+
+  if ( count_kino ) {
+    translate_error = false;
+    movie_search_fetch_error = false;
+    swiper.removeAllSlides(); // удалить все слайды из слайдера
+    await addNextSlide(); // инициализировать слайдер новыми карточками
+  }
+  else {
+    translate_error = false;
+    movie_search_fetch_error = false;
+    my_input_search_value = word_query; // текущий текст внутри инпута
+    my_input_search_value_translate = word_query; // перевод содержимого инпута
+    await get(1); // фетч запрос первой страницы
+    swiper.removeAllSlides(); // удалить все слайды из слайдера
+    await addNextSlide(); // инициализировать слайдер новыми карточками
+  }
+
 });
 
 

@@ -216,16 +216,18 @@ text-transform: uppercase; /* Заглавные буквы */
 }
 
 .button_reference {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 200px;
-    height: min-content;
-    margin: 10px;
-    border: 2px solid black;
-    border-radius: 10px;
-    box-shadow: 0 0 5px 5px blue;
-    outline: none;
+  position: absolute;
+  top: 16px;
+  left: calc(50% - 200px);
+  width: 400px;
+  height: min-content;
+  margin: 10px;
+  border: 2px solid black;
+  border-radius: 10px;
+  box-shadow: 0 0 5px 5px blue;
+  outline: none;
+  padding: 4px 0;
+  z-index: 1;
 }
 
 .button_reference:hover {

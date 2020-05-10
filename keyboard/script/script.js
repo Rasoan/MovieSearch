@@ -4,7 +4,7 @@ let section = document.querySelector("body");
 
  let button_keyboard_reference = document.createElement('button'); 
  button_keyboard_reference.classList.add('button_reference');
- button_keyboard_reference.innerHTML = "Инструкция по использованию виртуальной клавиатуры";
+ button_keyboard_reference.innerHTML = "Информация для проверяющих";
  section.append(button_keyboard_reference);
 
 let reference_container = document.createElement('div');
