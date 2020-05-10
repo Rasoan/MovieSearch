@@ -11,17 +11,20 @@
 <body>
   <div class="header-container">
     <h1 class="header-name">MovieSearch</h1>
+    <p class="header-text">первый поисковик фильмов.</p>
   </div>
 
   <main class="main-container">
     <form class="form-search">
-      <input class="input-search" type="text" placeholder="Search movie" autofocus="">
+      <p class="form-search-clear"></p>
+      <p class="form-search-keyboard"></p>
+      <input class="input-search" type="text" placeholder="Введите название фильма" autofocus="">
       <button class="button-search" type="submit">Search</button>
       <span data-name="Clear" class="search-clear tooltip"></span>
       <span data-name="search-keyboard" class="search-tia tooltip"></span>
     </form>
     <div class="message-container">
-      <p class="message-text">Первый поисковик фильмов.</p>
+      <p class="message-text">---------</p>
     </div>
     
     
@@ -100,32 +103,6 @@
     font-size: 13px;
   }
 </style>
-<script>
-var appendNumber = 600;
-var prependNumber = 1;
-  document.querySelector('.slide-1').addEventListener('click', function (e) {
-    e.preventDefault();
-    swiper.slideTo(0, 0);
-  });
-  document.querySelector('.slide-250').addEventListener('click', function (e) {
-    e.preventDefault();
-    swiper.slideTo(249, 0);
-  });
-  document.querySelector('.slide-500').addEventListener('click', function (e) {
-    e.preventDefault();
-    swiper.slideTo(499, 0);
-  });
-  document.querySelector('.prepend-2-slides').addEventListener('click', function (e) {
-    e.preventDefault();
-    swiper.virtual.prependSlide([
-      'Slide ' + (--prependNumber),
-      'Slide ' + (--prependNumber)
-    ]);
-  });
-  document.querySelector('.append-slide').addEventListener('click', function (e) {
-    e.preventDefault();
-    swiper.virtual.appendSlide('Slide ' + (++appendNumber));
-  });
-</script>
+
 
   

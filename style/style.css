@@ -28,46 +28,161 @@
 }
 
 
-
+body {
+  font-family: 'Lato-Regular';
+  font-weight: normal;
+  font-style: normal;
+}
 
 
 
 .header-container {
-  background-color: rgb(102, 79, 79);
-  padding: 10px 0px;
+ background-color: rgb(216, 210, 210);
+ color: #201750; 
+ position: relative;
+ padding: 60px 0px 200px;
+ margin: 0;
+  /* background: url(../images/image-header.jpg);
+  background-repeat: no-repeat;
+  background-size: cover; */
 }
 
+
+.header-container:before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 300px;
+  height: 200px;
+  background: url(../images/kino.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.header-container:after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 250px;
+  height: 200px;
+  background: url(../images/camera.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
 .header-name {
-  margin: 20px auto;
+  position: absolute;
+  top: 90px;
+  left: calc( 50% - 202px);
+  font-size: 70px;
+  font-family: 'Lato-Bold';
+  font-weight: bold;
+  font-style: normal;
   width: min-content;
 }
 
+.header-text {
+  position: absolute;
+  top: 190px;
+  left: calc( 50% - 196px );
+  font-size: 20px;
+  font-family: 'Lato-Bold';
+  font-weight: bold;
+  font-style: normal;
+}
+
 .main-container {
- 
+  margin: 0;
 }
 
 .form-search {
+  position: relative;
   width: 100%;
-  margin: 10px auto;
-  padding: 20px;
+  margin: 0px auto;
+  padding: 30px;
   display: flex;
-  background-color: brown;
+  background-color: #1c0917;
   justify-content: center;
 }
 
-.input-search {
-  width: 400px;
-  margin-right: 20px;
 
-  
+
+
+.form-search-clear {
+  content: '';
+  position: absolute;
+  margin: 0;
+  top: 37px;
+  left: 800px;
+  width: 25px;
+  height: 25px;
+  background: url(../images/clear.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: 1;
 }
 
-.button-search {
-  width: 100px;
+
+.form-search-keyboard {
+  content: '';
+  position: absolute;
+  margin: 0;
+  top: 36px;
+  left: 740px;
+  width: 50px;
   height: 30px;
-  background-color: blueviolet;
-  color: white;
+  background: url(../images/keyboard.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+.form-search-keyboard:hover, .form-search-clear:hover {
+  cursor: pointer;
+}
+
+.input-search {
+  position: relative;
+  width: 400px;
+  padding: 10px;
+  margin-right: 20px;
+  border: 2px solid black;
+  outline: none;
+}
+
+
+
+.button-search {
+  position: relative;
+  font-size: 20px;
+  text-align: right;
+  width: 120px;
+  height: 39px;
+  background-color: white;
   border: 3px solid black;
+  padding: 0 15px;
+  user-select: none;
+  outline: none;
+}
+
+.button-search:after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 25px;
+  height: 25px;
+  background: url(../images/find-search.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.button-search:hover {
+  cursor: pointer;
 }
 
 .search-clear {
@@ -177,17 +292,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 0;
   background-color: white;
 }
 
 .message-text {
   display: block;
-  min-width: 1000px;
   text-align: center;
-  border: 1px solid black;
+  border-bottom: 5px solid black;
   color: black;
-  padding: 20px 50px;
+  padding: 0px 50px;
   font-size: 20px;
   font-weight: bold;
 }
@@ -218,6 +331,7 @@
 
 
 .swiper-buttons {
+ user-select: none;
  position: relative;
  font-size: 18px;
  font-family: 'Lato-Bold';
@@ -235,12 +349,42 @@
  z-index: 100;
 }
 
+.back-top::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: -44px;
+  width: 80px;
+  height: 40px;
+  background: url(../images/left.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+  opacity: 0.8;
+}
+
 
 .go-end {
   position: absolute;
   right: 500px;
   bottom: 10px;
   z-index: 100;
+}
+
+.go-end::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: -44px;
+  width: 80px;
+  height: 40px;
+  background: url(../images/right.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+  opacity: 0.8;
 }
 
 .back-top:hover, .go-end:hover {

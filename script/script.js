@@ -426,11 +426,13 @@ swiper.on("slideChange", async () => { // добавить слушателя с
 
 // переход в начало слайдера
 button_top.addEventListener("click", () => {
+  stop_slide_changed_listener = 0; // для слушателя события перелистывания слайдера
   swiper.slideTo( 0  );
 });
 
 // переход в конец слайдера
 button_end.addEventListener("click", () => {
+  stop_slide_changed_listener = 0; // для слушателя события перелистывания слайдера
   swiper.slideTo( count_slides_in_swiper );
 });
 
