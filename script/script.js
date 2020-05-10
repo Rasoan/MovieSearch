@@ -16,9 +16,9 @@ const clear_search = document.getElementById("form-search-clear-id");
 const keyboard_search = document.getElementById("form-search-keyboard-id");
 
 
-// const my_id = "812ef198"; // rasoian
+const my_id = "812ef198"; // rasoian
 // const my_id = "88afb97a"; // ipk
-const my_id = "6670627"; // ipk2diplom
+// const my_id = "6670627"; // ipk2diplom
 const my_yandex_translate_id = "trnsl.1.1.20200502T072125Z.5214d89f357d1ea0.9c96b2eed2559991b3730c16497d84b60b215622";
 let cards_current_page = []; // массив в котором хранится 10 объектов с информацией по фильмам
 let my_input_search_value = 'troy'; // текущий текст внутри инпута
