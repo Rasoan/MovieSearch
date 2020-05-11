@@ -335,6 +335,10 @@ body {
   left: 0;
 }
 
+.swiper-slide:hover .wrapper-img-text {
+  border-bottom: 2px solid white;
+}
+
 .message-container {
   margin: 0 auto;
   display: flex;
