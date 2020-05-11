@@ -31,7 +31,7 @@ let indicate_fetch = true; // индикатор фетчей, можно ли �
 let stop_slide_changed_listener = 0; // для слушателя события перелистывания слайдера
 let movie_request_limit = false; // когда закончится возможно скачивать фильмы это станет тру
 let translate_error = false; // ошибка в translate()
-let movie_search_fetch_error = false;  // ошибка в поисковике фильмов
+let movie_search_fetch_error = false; // ошибка в поисковике фильмов
 let start_page = false; // если страница только загрузилась заткнуть обработчика события slidechange
 let key_up_flag = false; // запрещаем повторное нажатие по enter
 let word_query = ''; // последний запрос
@@ -56,12 +56,12 @@ let swiper = new Swiper('.swiper-container', { // создаём слайдер
       spaceBetween: 10
     },
     // when window width is >= 480px
-    480: {
+    500: {
       slidesPerView: 3,
       spaceBetween: 20
     },
     // when window width is >= 640px
-    800: {
+    1100: {
       slidesPerView: 4,
       spaceBetween: 30
     }
@@ -83,8 +83,8 @@ function messageToUser(message_text) {
     message_block.innerHTML = "Для того что бы найти фильм, надо ввести в поле поиска его название.";
     return;
   }
-  
-  if ( movie_request_limit ) {
+
+  if (movie_request_limit) {
     message_block.innerHTML = "К сожалению лимит запросов на сервер www.omdbapi.com закончен, приходи завтра, найдём кинцо, а на сегодня всё.";
     return;
   }
@@ -102,16 +102,16 @@ function messageToUser(message_text) {
 
 // функция которая возьмёт из инпута текст и переведёт его, запишет перевод текста и оригинал в глобальные переменные
 async function translate() {
-  
+
   if (my_input_search.value == '') {
     messageToUser("Пустой инпут, конец");
     translate_error = true;
     return;
   }
-  
-  
+
+
   let check_in_english = my_input_search.value.match(/\w/gi);
-  if ( check_in_english ) {
+  if (check_in_english) {
     my_input_search_value_translate = my_input_search.value;
     return;
   }
@@ -125,7 +125,7 @@ async function translate() {
     response = response.text[0]; // получили перевод текста на английский
     my_input_search_value_translate = response; // записали перевод текста в глобальную переменную
 
-   
+
     return response; // вернули промис в котором перевод слова
   } catch (error) {
     messageToUser("Это блок catch в функции translate, ОШИБКА!");
@@ -150,7 +150,7 @@ async function fetchAsyncTodos(number_page) {
 
     let response = await fetch(`https://www.omdbapi.com/?s=${my_input_search_value_translate}&page=${number_page}&apikey=${my_id}&s`);
     const data = await response.json(); // распарсили строку в объект
-    
+
 
     if (data.Error == "Request limit reached!") {
       movie_request_limit = true; // если вышел лимит запросов то тру
@@ -166,7 +166,7 @@ async function fetchAsyncTodos(number_page) {
   } catch (error) {
     movie_search_fetch_error = true;
 
-    
+
   }
 }
 
@@ -198,7 +198,7 @@ let isFetching = false; // это флаг, пока он true загружае�
 async function get(number_page) {
   loading.style.visibility = "visible";
   indicator_slides.style.visibility = "hidden";
- 
+
 
 
 
@@ -247,13 +247,13 @@ async function get(number_page) {
   });
 
   more_info_cards = await Promise.all(more_info_cards); // массив промисов стал массивом объектов
- 
+
   for (let i = 0; i < more_info_cards.length; i++) { // в этом цикле мы добавляем основному объекту все нужную инфу по фильмам
     cards_current_page[i].imdbID = more_info_cards[i].imdbID; // айдишник 
-    cards_current_page[i].title = more_info_cards[i].Title;   // название 
+    cards_current_page[i].title = more_info_cards[i].Title; // название 
     cards_current_page[i].imdbRating = more_info_cards[i].imdbRating == "N/A" ? "" : more_info_cards[i].imdbRating; // рейтинг
     more_info_cards[i].Year = more_info_cards[i].Year.slice(0, 4);
-    cards_current_page[i].year = more_info_cards[i].Year;  // дата выпуска 
+    cards_current_page[i].year = more_info_cards[i].Year; // дата выпуска 
     cards_current_page[i].genre = more_info_cards[i].Genre; // жанр
     cards_current_page[i].plot = more_info_cards[i].Plot; // описание 
     cards_current_page[i].img = cards_current_page[i].img == "N/A" ? "images/notimage.jpg" : cards_current_page[i].img; // картинка
@@ -261,16 +261,16 @@ async function get(number_page) {
 
 
 
-  
+
   isFetching = false; // разрешаем ложить карточки в слайдер, гет закончила работу
-  
 
-  
+
+
   count_fetch++; // увеличиваем счётчик фетчей на один что бы сделать следующий новый запрос
-  
-  
 
- 
+
+
+
   loading.style.visibility = "hidden";
   indicator_slides.style.visibility = "visible";
 }
@@ -279,48 +279,46 @@ async function get(number_page) {
 
 
 // функция которая добавит слайд
- function addNextSlide() {
+function addNextSlide() {
 
 
 
 
-  
+
 
   if (translate_error || movie_search_fetch_error) {
- 
+
     return;
   }
 
 
 
 
-
- 
-    
-    
-    
-    for (let i = 0; i < cards_current_page.length; i++) {
-      swiper.appendSlide(`<div class="swiper-slide">
+  for (let i = 0; i < cards_current_page.length; i++) {
+    swiper.appendSlide(`<div class="swiper-slide">
       <div class="swiper-contant-container">
+      <div class="wrapper-img-text">
        <img class="swiper-img" src="${cards_current_page[i].img}">
+       <div class="swiper-additional-information">
+       <p class="swiper-basic-information">Basic information</p>
+       <p class="swiper-genre"><span class="swiper-genre-name">Genre:</span>&nbsp;${cards_current_page[i].genre.toLowerCase()}.</p>
+       <p class="swiper-plot"><span class="swiper-plot-name">Description:</span>&nbsp;${cards_current_page[i].plot.toLowerCase()}</p>
+       </div>
+       </div>
        <a class="swiper-tittle" href="${cards_current_page[i].link}">${cards_current_page[i].title}</a>
        <p class="swiper-year">${cards_current_page[i].year}</p>
        <p class="swiper-rating">${cards_current_page[i].imdbRating}</p>
-       <div class="swiper-additional-information">
-         <p class="swiper-genre">${cards_current_page[i].genre}</p>
-         <p class="swiper-plot">${cards_current_page[i].plot}</p>
-       </div>
         </div>
         </div>`);
-    
 
-    
+
+
     count_slides_in_swiper++; // количество слайдов в слайдере +1
 
- 
+
   }
 
-  
+
 
 
 }
@@ -376,7 +374,7 @@ buttonSearch.addEventListener('click', async element => {
   my_input_search.focus();
 
 
-  
+
 
 
 
@@ -384,16 +382,15 @@ buttonSearch.addEventListener('click', async element => {
   await translate(); // перевести слово
   await get(1); // фетч запрос первой страницы
   messageToUser(my_input_search.value);
-  
 
- 
-  if ( count_kino ) {
+
+
+  if (count_kino) {
     translate_error = false;
     movie_search_fetch_error = false;
     swiper.removeAllSlides(); // удалить все слайды из слайдера
     await addNextSlide(); // инициализировать слайдер новыми карточками
-  }
-  else {
+  } else {
     translate_error = false;
     movie_search_fetch_error = false;
     my_input_search_value = word_query; // текущий текст внутри инпута
@@ -410,13 +407,13 @@ buttonSearch.addEventListener('click', async element => {
 
 // то же самое что и клик когда нажимаем на ентер
 document.addEventListener("keydown", async element => {
-  if ( element.code != "Enter" || key_up_flag ) return; // если нажали не по ентеру
+  if (element.code != "Enter" || key_up_flag) return; // если нажали не по ентеру
   my_input_search.focus();
 
   key_up_flag = true; // запрещаем повторное бесконечное нажатие enter
 
   // закрываем клавиатуру и выполняем запрос
-  if ( !my_keyboard.classList.contains("display-none") ) {
+  if (!my_keyboard.classList.contains("display-none")) {
     my_keyboard.classList.add("display-none");
   }
 
@@ -435,21 +432,20 @@ document.addEventListener("keydown", async element => {
   start_page = true; // страница только начала загружатся повторно гет не вызывать
   movie_request_limit = false; // станет тру, когда  закончится лимит запрососв на фильмы
 
- 
+
 
   await translate(); // перевести слово
   await get(1); // фетч запрос первой страницы
   messageToUser(my_input_search.value);
-  
 
 
-  if ( count_kino ) {
+
+  if (count_kino) {
     translate_error = false;
     movie_search_fetch_error = false;
     swiper.removeAllSlides(); // удалить все слайды из слайдера
     await addNextSlide(); // инициализировать слайдер новыми карточками
-  }
-  else {
+  } else {
     translate_error = false;
     movie_search_fetch_error = false;
     my_input_search_value = word_query; // текущий текст внутри инпута
@@ -479,25 +475,25 @@ document.addEventListener("keyup", async element => {
 
 /*-----------------------------слушатель слайдера начало-----------------------------*/
 swiper.on("slideChange", async () => { // добавить слушателя слайдеру
- 
+
 
   // убрать виртуальную клавиатуру если свайпнули слайдер
-  if ( !my_keyboard.classList.contains("display-none") ) { 
+  if (!my_keyboard.classList.contains("display-none")) {
     my_keyboard.classList.add("display-none");
   }
 
-  if ( movie_request_limit ) {
+  if (movie_request_limit) {
     message_block.innerHTML = "К сожалению лимит запросов на сервер www.omdbapi.com закончен, приходи завтра, найдём кинцо, а на сегодня всё.";
     return;
   }
-  
+
 
 
   if (translate_error || movie_search_fetch_error || isFetching || !indicate_fetch) {
 
     return;
   }
-  
+
 
   if (stop_slide_changed_listener) {
 
@@ -513,24 +509,24 @@ swiper.on("slideChange", async () => { // добавить слушателя с
     await addNextSlide(); // вызвали асинхронно функцию которая добавит слайд
   }
 
-  
 
-  
-  
 
-  
+
+
+
+
   if (count_slides_in_swiper == count_kino) {
 
     indicate_fetch = false; // запрещаем новые запросы, потому что нет чего больше запрашивать
     return;
   } // если количество страниц в слайдере равно максимуму страниц по запросу то exit
 
-  
 
 
 
-  
-  
+
+
+
 });
 /*-----------------------------слушатель слайдера конец-----------------------------*/
 
@@ -541,15 +537,15 @@ swiper.on("slideChange", async () => { // добавить слушателя с
 // переход в начало слайдера
 button_top.addEventListener("click", () => {
   stop_slide_changed_listener = 0; // для слушателя события перелистывания слайдера
-  swiper.slideTo( 0  );
+  swiper.slideTo(0);
 });
 
 // переход в конец слайдера
 button_end.addEventListener("click", () => {
   stop_slide_changed_listener = 0; // для слушателя события перелистывания слайдера
-  swiper.slideTo( count_slides_in_swiper );
+  swiper.slideTo(count_slides_in_swiper);
 
-  if ( movie_request_limit ) {
+  if (movie_request_limit) {
     message_block.innerHTML = "К сожалению лимит запросов на сервер www.omdbapi.com закончен, приходи завтра, найдём кинцо, а на сегодня всё.";
     return;
   }
@@ -570,21 +566,21 @@ clear_search.addEventListener("click", () => {
 
 
 document.addEventListener('click', element => {
-  if( element.target.closest(".keyboard-container") || element.target.classList.contains("form-search-keyboard") ||
-  element.target.classList.contains("input-search") || element.target.classList.contains("form-search-clear") || 
-  element.target.innerText == "En" || element.target.innerText == "Rus") {
-  return;
+  if (element.target.closest(".keyboard-container") || element.target.classList.contains("form-search-keyboard") ||
+    element.target.classList.contains("input-search") || element.target.classList.contains("form-search-clear") ||
+    element.target.innerText == "En" || element.target.innerText == "Rus") {
+    return;
   }
-  
-  
-  if ( !my_keyboard.classList.contains("display-none") ) {
+
+
+  if (!my_keyboard.classList.contains("display-none")) {
     my_keyboard.classList.add("display-none");
   }
-  
+
 });
 
 document.addEventListener('click', element => {
-  if ( element.target.closest(".keyboard-container") ) {
+  if (element.target.closest(".keyboard-container")) {
     my_input_search.focus();
   }
 });
@@ -597,17 +593,17 @@ document.addEventListener('click', element => {
 
 // когда кликнули по кнопке enter на виртуальной клавиатуре
 document.addEventListener('click', async element => {
-  
- if( !element.target.classList.contains("key-enter") )  return; // если кликнули мышко не по ентеру то выходим из листенера
- my_input_search.focus();
- 
- // закрываем клавиатуру и выполняем запрос
- if ( !my_keyboard.classList.contains("display-none") ) {
-  my_keyboard.classList.add("display-none");
-}
-  
- 
- translate_error = false;
+
+  if (!element.target.classList.contains("key-enter")) return; // если кликнули мышко не по ентеру то выходим из листенера
+  my_input_search.focus();
+
+  // закрываем клавиатуру и выполняем запрос
+  if (!my_keyboard.classList.contains("display-none")) {
+    my_keyboard.classList.add("display-none");
+  }
+
+
+  translate_error = false;
   movie_search_fetch_error = false;
   stop_slide_changed_listener = 2; // пока true слушатель слайдера заткнут
   cards_current_page = []; // массив в котором хранится 10 объектов с информацией по фильмам
@@ -621,7 +617,7 @@ document.addEventListener('click', async element => {
   movie_request_limit = false; // станет тру, когда  закончится лимит запрососв на фильмы
 
 
-  
+
 
 
 
@@ -629,15 +625,14 @@ document.addEventListener('click', async element => {
   await translate(); // перевести слово
   await get(1); // фетч запрос первой страницы
   messageToUser(my_input_search.value);
-  
 
-  if ( count_kino ) {
+
+  if (count_kino) {
     translate_error = false;
     movie_search_fetch_error = false;
     swiper.removeAllSlides(); // удалить все слайды из слайдера
     await addNextSlide(); // инициализировать слайдер новыми карточками
-  }
-  else {
+  } else {
     translate_error = false;
     movie_search_fetch_error = false;
     my_input_search_value = word_query; // текущий текст внутри инпута
@@ -648,8 +643,3 @@ document.addEventListener('click', async element => {
   }
 
 });
-
-
-
-
-

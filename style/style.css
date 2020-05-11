@@ -28,27 +28,7 @@
 }
 
 
-.swiper-additional-information {
-  display: none; 
-  position: absolute;
-  top: 0px;
-  width: 100%;
-  height: 60%;
-  background-color: wheat;
-  text-align: justify;
-  box-sizing: border-box;
-  padding: 10px;
-  border: 1px solid black;
-}
 
-
-.swiper-slide:hover  .swiper-additional-information {
-  display: block;
-  position: absolute;
-  width: 100% !important;
-  top: 0;
-  left: 0;
-}
 
 body {
   font-family: 'Lato-Regular';
@@ -238,9 +218,19 @@ body {
   overflow: hidden;
 }
 
-.swiper-img {
+
+.wrapper-img-text {
+  position: relative;
   width: 100%;
   height: 400px;
+  margin-bottom: 12px;
+  border-bottom: 2px solid;
+}
+
+
+.swiper-img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -267,7 +257,7 @@ body {
   font-family: 'Lato-Regular';
   font-weight: normal;
   font-style: normal;
-  margin: 0 0 10px 0;
+  margin: 0 0 20px;
 }
 
 .swiper-rating:before {
@@ -286,34 +276,63 @@ body {
   font-family: 'Lato-Regular';
   font-weight: normal;
   font-style: normal;
-  margin: 10px 0;
+  margin: 0 0 20px;
 }
 
+.swiper-basic-information {
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+}
 
+.swiper-genre-name {
+  color: black;
+}
 
 .swiper-genre {
   font-family: 'Lato-Regular';
   font-weight: normal;
   font-style: normal;
+  color: #1c2e48;
+  font-size: 14px;
+}
 
+.swiper-plot-name {
+  color: black;
 }
 
 .swiper-plot {
   font-family: 'Lato-Regular';
   font-weight: normal;
   font-style: normal;
-  font-size: 15px;
-
+  font-size: 14px;
+  line-height: 20px;
+  color: #1c2e48;
 }
 
 .swiper-additional-information {
   display: none;
   position: absolute;
-  top: 600px;
-  left: calc(50% - 140px);
-  width: 280px;
   text-align: justify;
-  border: 1px solid black;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: white;
+  top: 0;
+  left: 0;
+}
+
+
+
+
+.swiper-slide:hover  .swiper-additional-information {
+  display: block;
+  position: absolute;
+  width: 100% !important;
+  top: 0;
+  left: 0;
 }
 
 .message-container {
@@ -440,7 +459,6 @@ body {
   width: 1360px;
   overflow: hidden;
   margin: 0 auto;
-  ;
 }
 
 
@@ -504,7 +522,7 @@ body {
   }
 
   .swiper-img {
-    height: 300px
+    
   }
 
   .swiper-pagination-fraction {
@@ -563,7 +581,30 @@ body {
     padding: 10px 23px !important;
   }
 
-
+  .wrapper-img-text {
+    height: 454px;
+  }
+  .swiper-additional-information {
+  
+  }
+  .swiper-basic-information {
+  
+  }
+  
+  .swiper-genre-name {
+  
+  }
+  
+  .swiper-genre {
+  
+  }
+  
+  .swiper-plot-name {
+  
+  }
+  .swiper-plot {
+  
+  }
 
 }
 
@@ -628,7 +669,7 @@ body {
   }
 
   .swiper-img {
-    height: 300px
+    
   }
 
   .swiper-pagination-fraction {
@@ -678,7 +719,7 @@ body {
 
   .key-backspace {
     width: 50px !important;
-    ;
+    
   }
 
   .key-capslk {
@@ -695,6 +736,39 @@ body {
     width: 200px !important;
     left: calc(50% - 100px) !important;
 
+  }
+
+
+  .wrapper-img-text { 
+    height: 310px;
+  }
+
+  .swiper-tittle {
+    margin: 10px 0;
+  }
+  .swiper-year {
+    margin: 0 0 10px;
+  }
+  .swiper-additional-information {
+  
+  }
+  .swiper-basic-information {
+    margin: 5px 0 15px;
+  }
+  
+  .swiper-genre-name {
+  
+  }
+  
+  .swiper-genre {
+    margin: 5px 0;
+  }
+  
+  .swiper-plot-name {
+  
+  }
+  .swiper-plot {
+    margin: 8px 0 0;
   }
 
 }
@@ -741,26 +815,7 @@ body {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* c 700 до 501 надо фиксить */
 @media (max-width: 700px) {
 
   .header-container {
@@ -870,6 +925,31 @@ body {
     left: 15px !important;
   }
 
+
+
+  .wrapper-img-tex { }
+.swiper-additional-information {
+
+}
+.swiper-basic-information {
+
+}
+
+.swiper-genre-name {
+
+}
+
+.swiper-genre {
+
+}
+
+.swiper-plot-name {
+
+}
+.swiper-plot {
+
+}
+
 }
 
 
@@ -881,7 +961,7 @@ body {
 
 
 
-@media (max-width: 600px) {
+@media (max-width: 500px) {
   .button_reference {
     display: none !important;
   }
@@ -1035,5 +1115,29 @@ body {
   .swiper-button-prev {
     left: 15px !important;
   }
+
+
+  .wrapper-img-tex { }
+.swiper-additional-information {
+
+}
+.swiper-basic-information {
+
+}
+
+.swiper-genre-name {
+
+}
+
+.swiper-genre {
+
+}
+
+.swiper-plot-name {
+
+}
+.swiper-plot {
+
+}
 
 }
