@@ -78,16 +78,6 @@ let swiper = new Swiper('.swiper-container', { // создаём слайдер
 
 
 
-
-
-
-
-
-
-
-
-
-
 function messageToUser(message_text) {
   if (message_text == '') {
     message_block.innerHTML = "Для того что бы найти фильм, надо ввести в поле поиска его название.";
@@ -331,11 +321,6 @@ async function get(number_page) {
   }
 
   
-  
-  
-
-
-
 
 
 }
@@ -388,6 +373,7 @@ buttonSearch.addEventListener('click', async element => {
   indicate_fetch = true; // индикатор фетчей, можно ли сделать следующий фетч? есть ли ещё страницы по данному запросу?
   start_page = true; // страница только начала загружатся повторно гет не вызывать
   movie_request_limit = false; // станет тру, когда  закончится лимит запрососв на фильмы
+  my_input_search.focus();
 
 
   
@@ -425,6 +411,7 @@ buttonSearch.addEventListener('click', async element => {
 // то же самое что и клик когда нажимаем на ентер
 document.addEventListener("keydown", async element => {
   if ( element.code != "Enter" || key_up_flag ) return; // если нажали не по ентеру
+  my_input_search.focus();
 
   key_up_flag = true; // запрещаем повторное бесконечное нажатие enter
 
@@ -571,18 +558,24 @@ button_end.addEventListener("click", () => {
 let my_keyboard = document.querySelector(".keyboard-container");
 keyboard_search.addEventListener("click", () => {
   my_keyboard.classList.toggle("display-none");
+  my_input_search.focus();
 });
 
 
 clear_search.addEventListener("click", () => {
   my_input_search.value = '';
+  my_input_search.focus();
 });
 
 
 
 document.addEventListener('click', element => {
-  if( element.target.closest(".keyboard-container") || element.target.classList.contains("form-search-keyboard") ||element.target.classList.contains("input-search") || element.target.classList.contains("form-search-clear")) 
+  if( element.target.closest(".keyboard-container") || element.target.classList.contains("form-search-keyboard") ||
+  element.target.classList.contains("input-search") || element.target.classList.contains("form-search-clear") || 
+  element.target.innerText == "En" || element.target.innerText == "Rus") {
   return;
+  }
+  
   
   if ( !my_keyboard.classList.contains("display-none") ) {
     my_keyboard.classList.add("display-none");
@@ -606,6 +599,7 @@ document.addEventListener('click', element => {
 document.addEventListener('click', async element => {
   
  if( !element.target.classList.contains("key-enter") )  return; // если кликнули мышко не по ентеру то выходим из листенера
+ my_input_search.focus();
  
  // закрываем клавиатуру и выполняем запрос
  if ( !my_keyboard.classList.contains("display-none") ) {

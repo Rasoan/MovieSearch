@@ -775,6 +775,12 @@ function inner_html(language) {
         case "Del":
           keys[i].classList.add('key', 'key-special', 'key-del');
           break;
+        case "Rus":
+          keys[i].classList.add('key', 'key-special', 'key-lang');
+          break;
+        case "En":
+          keys[i].classList.add('key', 'key-special', 'key-lang');
+          break;
         default:
           keys[i].classList.add('key');
       }
@@ -804,7 +810,7 @@ let body = document.querySelector('body');
 
 
 
-
+// дЛЯ РАССКЛАДКИ
 let flag = false;
 let key_div;
 
@@ -814,47 +820,6 @@ let key_div;
 
 
 
-
-
-
-document.addEventListener('keydown', function (e) {
- 
-
-  if (e.shiftKey == true && e.altKey == true && flag == false && e.ctrlKey != true) {
-    key_div = document.querySelectorAll('.keyboard-row');
-
-    key_div.forEach(element => {
-      element.innerHTML = "";
-    });
-
-    localStorage.language = "ru";
-    inner_html("ru");
-    document.querySelectorAll('.key').forEach(element => {
-      if (element.classList.contains('key-shift-left') || element.classList.contains('key-alt-left')) {
-        element.classList.add('key-active');
-      }
-    });
-    flag = true;
-    return;
-  }
-
-  if (e.shiftKey == true && e.altKey == true && flag == true && e.ctrlKey != true) {
-    key_div = document.querySelectorAll('.keyboard-row');
-    
-    key_div.forEach(element => {
-      element.innerHTML = "";
-    });
-    localStorage.language = "en";
-    inner_html("en");
-    document.querySelectorAll('.key').forEach(element => {
-      if (element.classList.contains('key-shift-left') || element.classList.contains('key-alt-left')) {
-        element.classList.add('key-active');
-      }
-    });
-    flag = false;
-    return;
-  }
-});
 
 
 
@@ -1134,7 +1099,7 @@ document.addEventListener("click", element => {
   }
 
   if ( element.target.classList.contains("key-bottom") ) { // если клик по стрелке вниз
-    my_input_search.selectionEnd = 0; 
+    my_input_search.selectionEnd = 0;
   }
 
 });
@@ -1165,4 +1130,47 @@ document.addEventListener("keydown", element => {
   
 
 
+// смена раскладки виртуальной клавиатуры
+document.addEventListener("click", e => {
 
+  // если клик по англ
+  if ( e.target.innerText == "En" ) {
+    key_div = document.querySelectorAll('.keyboard-row');
+    
+    key_div.forEach(element => {
+      element.innerHTML = "";
+    });
+    localStorage.language = "en";
+    inner_html("en");
+
+    flag = false;
+    return;
+  }
+   
+  // если клик по англ
+  if ( e.target.innerText == "Rus" ) { 
+    key_div = document.querySelectorAll('.keyboard-row');
+
+    key_div.forEach(element => {
+      element.innerHTML = "";
+    
+    });
+   
+    localStorage.language = "ru";
+    inner_html("ru");
+
+    flag = true;
+    return; 
+  }
+
+});
+
+
+
+
+
+document.addEventListener("keydown", element => {
+  if ( !my_keyboard.classList.contains("display-none")  ) {
+    my_input_search.focus();
+  }
+});
