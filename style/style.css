@@ -327,12 +327,8 @@ body {
 
 
 
-.swiper-slide:hover  .swiper-additional-information {
+.wrapper-img-text:hover  .swiper-additional-information {
   display: block;
-  position: absolute;
-  width: 100% !important;
-  top: 0;
-  left: 0;
 }
 
 .swiper-slide:hover .wrapper-img-text {
@@ -823,13 +819,21 @@ body {
 @media (max-width: 700px) {
 
   .header-container {
-    width: 600px;
+    width: 500px;
+    padding: 60px 0px 150px;
 
   }
 
+  .header-name {
+    font-size: 50px;
+    top: 88px;
+    left: calc(50% - 145px);
+
+}
+
 
   .header-container:before {
-    top: 26px !important;
+    top: 14px !important;
     left: -20px !important;
     width: 200px !important;
     height: 100px !important;
@@ -837,24 +841,24 @@ body {
   }
 
   .header-container::after {
-    top: 40px !important;
-    right: 40px !important;
+    top: 21px !important;
+    right: 42px !important;
     width: 120px !important;
     height: 100px !important;
   }
 
   .form-search {
-    width: 540px;
+    width: 500px;
     position: relative;
-    margin: 0px 0 0 20px;
-    padding: 30px;
+    margin: 0 auto;
+    padding: 30px 0;
     display: flex;
-    justify-content: start;
+    justify-content: center;
   }
 
   .input-search {
     position: relative;
-    width: 300px;
+    width: 220px;
     padding: 10px 50px 10px 10px;
     margin-right: 10px;
     border: 2px solid black;
@@ -866,24 +870,27 @@ body {
   }
 
   .form-search-clear {
-    left: 358px;
+    left: 292px;
   }
 
 
   .header-name {}
 
-  .header-text {}
+  .header-text {
+    top: 150px;
+    left: calc(50% - 142px);
+  }
 
   .message-container {
-    width: 600px;
+    width: 500px;
   }
 
   .container-slider {
-    width: 600px;
+    width: 500px;
   }
 
   .swiper-img {
-    height: 300px
+    
   }
 
   .swiper-pagination-fraction {
@@ -916,8 +923,7 @@ body {
 
   .button_reference {
 
-    width: 200px !important;
-    left: calc(50% - 100px) !important;
+    display: none;
 
   }
 
@@ -931,7 +937,9 @@ body {
 
 
 
-  .wrapper-img-tex { }
+  .wrapper-img-tex {
+    height: 310px;
+   }
 .swiper-additional-information {
 
 }
@@ -1072,7 +1080,7 @@ body {
   }
 
   .swiper-img {
-    height: 300px
+    
   }
 
 
@@ -1102,7 +1110,9 @@ body {
 
 
 
-
+.swiper-button-prev, .swiper-button-next {
+  display: none !important;
+}
 
 
   .button_reference {
@@ -1121,11 +1131,14 @@ body {
   }
 
 
-  .wrapper-img-tex { }
+  .wrapper-img-tex { 
+    height: 232px;
+  }
 .swiper-additional-information {
 
 }
 .swiper-basic-information {
+  display: none;
 
 }
 
@@ -1142,6 +1155,13 @@ body {
 }
 .swiper-plot {
 
+}
+
+.swiper-tittle {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  height: 20px;
 }
 
 }

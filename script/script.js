@@ -57,6 +57,10 @@ let swiper = new Swiper('.swiper-container', { // создаём слайдер
     },
     // when window width is >= 480px
     500: {
+      slidesPerView: 2,
+      spaceBetween: 20
+    },
+    700: {
       slidesPerView: 3,
       spaceBetween: 20
     },
@@ -80,22 +84,22 @@ let swiper = new Swiper('.swiper-container', { // создаём слайдер
 
 function messageToUser(message_text) {
   if (message_text == '') {
-    message_block.innerHTML = "Для того что бы найти фильм, надо ввести в поле поиска его название.";
+    message_block.innerHTML = "Enter your request, the field cannot be empty";
     return;
   }
-
-  if (movie_request_limit) {
-    message_block.innerHTML = "К сожалению лимит запросов на сервер www.omdbapi.com закончен, приходи завтра, найдём кинцо, а на сегодня всё.";
+  
+  if ( movie_request_limit ) {
+    message_block.innerHTML = "Unfortunately the limit of requests to the server www.omdbapi.com is over, come tomorrow";
     return;
   }
 
 
   if (count_kino == 0) {
-    message_block.innerHTML = "No results were found for … ";
+    message_block.innerHTML = "No results were found for  [ " + message_text + " ]";
     return;
   }
 
-  message_block.innerHTML = "Showing results for  [ " + message_text + " ], " + " total " + count_kino + " films.";
+  message_block.innerHTML = "Showing results for  [ " + message_text + " ], " + " total " + count_kino + " films";
 }
 
 
