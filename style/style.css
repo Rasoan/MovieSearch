@@ -69,7 +69,7 @@ body {
   content: '';
   position: absolute;
   top: 20px;
-  right: 120px;
+  right: 178px;
   width: 250px;
   height: 200px;
   background: url(../images/camera.png);
@@ -204,10 +204,7 @@ body {
 
 
 .footer-container {
-  display: block;
-  width: 100%;
-  height: 20px;
-  border: 2px solid black;
+
 }
 
 
@@ -483,14 +480,14 @@ body {
 /* стили переключателья */
 .switch-play-training {
   position: absolute;
-  top: 20px;
-  display: inline-block;
-  width: 120px;
-  height: 32px;
-  border: 2px solid black;
-  border-radius: 4px;
-  padding: 1px 0px;
-  right: 20px;
+    top: 20px;
+    display: inline-block;
+    width: 120px;
+    height: 32px;
+    border: 2px solid black;
+    border-radius: 4px;
+    padding: 1px 0px;
+    right: 40px;
 }
 
 
@@ -595,6 +592,90 @@ body {
   color: #d8c1c8;
   border-bottom: 5px solid #d8c1c8;
 }
+
+
+.footer-container {
+  background-color: #dcdbdb;
+  padding: 10px;
+  border-top: 2px solid;
+}
+
+.background-footer-checked {
+  background-color: #56525d;
+}
+
+
+.link-container {
+  display: flex;
+}
+
+.link {
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+  border: 2px solid black;
+  border-radius: 75%;
+} 
+
+.link-git {
+  background: url(../images/git.png);
+  background-color: #d8d8e2;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+ }
+
+ .link-vk  {
+  background: url(../images/vk.png);
+  background-color: #d8d8e2;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 90%;
+ }
+
+ .link-telegram {
+  background: url(../images/telegram.png);
+  background-color: #d8d8e2;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 90%;
+ }
+
+ .link-telegram:hover {
+  background: url(../images/telegram-white.png);
+  background-color: black;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 90%;
+ }
+
+ .link-git:hover {
+  background: url(../images/git-white.png);
+  background-color: black;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+ }
+
+
+
+
+ .link-vk:hover  {
+  background: url(../images/vk-white.png);
+  background-color: black;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 90%;
+ }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1106,19 +1187,19 @@ body {
 
 
   .header-container:before {
-    top: 20px !important;
-    left: -10px !important;
+    top: 30px !important;
+    left: 24px !important;
     width: 120px !important;
     height: 70px !important;
     object-fit: contain !important;
-  }
+}
 
   .header-container::after {
-    top: 30px !important;
-    right: 38px !important;
-    width: 90px !important;
-    height: 74px !important;
-  }
+    top: 70px !important;
+    right: 30px !important;
+    width: 50px !important;
+    height: 39px !important;
+}
 
   .form-search {
     width: 300px;
@@ -1288,6 +1369,24 @@ body {
   white-space: nowrap;
   text-overflow: ellipsis;
   height: 20px;
+}
+
+.switch-play-training {
+  top: 20px;
+  width: 70px;
+  height: 18px;
+}
+
+.switch-play-training__input-checkbox:checked + .switch-play-training__slider:before {
+  left: 0px;
+}
+
+.switch-play-training__slider:before {
+  transform: translateX(43px);
+}
+
+.link-container {
+  justify-content: center;
 }
 
 }

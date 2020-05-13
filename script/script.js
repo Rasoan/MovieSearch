@@ -669,10 +669,13 @@ window.addEventListener('load', (event) => {
 let header_container = document.querySelector(".header-wrapper");  // шапка
 let main_container = document.querySelector(".main-container");  // основная часть
 let message_text_color = document.querySelector(".message-text");
+let footer_color = document.querySelector(".footer-container");
 
 document.querySelector(".switch-play-training__input-checkbox").addEventListener("click", element =>{
   header_container.classList.toggle("background-header-checked");
   main_container.classList.toggle("background-main-checked");
+  footer_color.classList.toggle("background-footer-checked");
+
   message_text_color.classList.toggle("message-text-color");
 });
 
