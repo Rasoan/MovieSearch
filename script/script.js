@@ -16,6 +16,8 @@ const clear_search = document.getElementById("form-search-clear-id");
 const keyboard_search = document.getElementById("form-search-keyboard-id");
 
 
+
+
 const my_id = "812ef198"; // rasoian
 // const my_id = "88afb97a"; // ipk
 // const my_id = "6670627"; // ipk2diplom
@@ -202,6 +204,7 @@ let isFetching = false; // это флаг, пока он true загружае�
 async function get(number_page) {
   loading.style.visibility = "visible";
   indicator_slides.style.visibility = "hidden";
+  button_end.classList.add("opacity-arrow-sw");
 
 
 
@@ -225,6 +228,7 @@ async function get(number_page) {
   if (translate_error || movie_search_fetch_error) {
     loading.style.visibility = "hidden";
     indicator_slides.style.visibility = "visible";
+    button_end.classList.remove("opacity-arrow-sw");
     return;
   }
 
@@ -277,6 +281,8 @@ async function get(number_page) {
 
   loading.style.visibility = "hidden";
   indicator_slides.style.visibility = "visible";
+  
+  button_end.classList.remove("opacity-arrow-sw");
 }
 
 
@@ -647,3 +653,7 @@ document.addEventListener('click', async element => {
   }
 
 });
+
+
+
+
