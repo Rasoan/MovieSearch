@@ -656,4 +656,31 @@ document.addEventListener('click', async element => {
 
 
 
+//отлавливаем баг с переключателем
+window.addEventListener('load', (event) => {
+  if (!document.querySelector(".switch-play-training__input-checkbox").checked && !document.querySelector(".switch-text").classList.contains(".switch-text-active")) {
+    document.querySelector(".switch-play-training__input-checkbox").checked = "false";
+  }
+});
+
+
+
+// document.querySelector(".switch-play-training__input-checkbox").checked // true/false
+let header_container = document.querySelector(".header-wrapper");  // шапка
+let main_container = document.querySelector(".main-container");  // основная часть
+let message_text_color = document.querySelector(".message-text");
+
+document.querySelector(".switch-play-training__input-checkbox").addEventListener("click", element =>{
+  header_container.classList.toggle("background-header-checked");
+  main_container.classList.toggle("background-main-checked");
+  message_text_color.classList.toggle("message-text-color");
+});
+
+
+
+ 
+
+
+
+
 
